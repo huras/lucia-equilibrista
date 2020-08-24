@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="400px" height="447px" viewBox="0 0 400 447" enable-background="new 0 0 400 447" xml:space="preserve">
+<path fill="#60302C" d="M153.483,443.791l37.079-169.663h23.596l35.955,169.663C250.113,443.791,190.563,450.532,153.483,443.791z"
+	/>
+<g>
+	<polygon fill="#FFCA32" stroke="#60302C" stroke-width="10" points="203.472,183.572 241.073,128.685 239.234,195.192 
+		301.918,172.891 261.338,225.613 325.16,244.416 261.338,263.219 301.918,315.941 239.234,293.64 241.073,360.149 203.472,305.262 
+		165.868,360.149 167.707,293.64 105.024,315.941 145.605,263.219 81.783,244.416 145.605,225.613 105.024,172.891 167.707,195.192 
+		165.868,128.685 	"/>
+	<circle fill="none" stroke="#F15A37" stroke-width="10" cx="203.471" cy="244.416" r="138.203"/>
+	<circle fill="none" stroke="#FCC731" stroke-width="10" cx="203.471" cy="244.416" r="100"/>
+	<circle fill="none" stroke="#FCC731" stroke-width="10" cx="203.471" cy="244.416" r="56.541"/>
+	<circle fill="#F79034" cx="244.349" cy="108.79" r="37.034"/>
+	<circle fill="#FFC92F" cx="162.629" cy="106.79" r="37.034"/>
+	<circle fill="#F15937" cx="318.417" cy="151.156" r="37.034"/>
+	<circle fill="#F15937" cx="91.562" cy="163.719" r="37.034"/>
+	<circle fill="#F79034" cx="65.269" cy="242.756" r="37.034"/>
+	<circle fill="#FFC92F" cx="90.764" cy="327.476" r="37.034"/>
+	<circle fill="#F15937" cx="160.506" cy="372.067" r="37.033"/>
+	<circle fill="#F79034" cx="244.349" cy="377.88" r="37.034"/>
+	<circle fill="#FFC92F" cx="318.417" cy="325.116" r="37.034"/>
+	<circle fill="#F79034" cx="344.673" cy="243.049" r="37.034"/>
+	<animateTransform attributeName="transform"
+		attributeType="XML"
+		type="rotate"
+		from="0 203.471 244.416"
+		to="360 203.471 244.416"
+		dur="10s"
+		repeatCount="indefinite"	/>
+</g>
+</svg>
