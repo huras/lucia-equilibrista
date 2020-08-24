@@ -8,7 +8,7 @@ var historico = [
 
   {
     url: './Cenas/Stage1',
-    rotation: "portrait-primary",
+    rotation: "landscape-primary",
     // type: 'animation'
   }
 ];
