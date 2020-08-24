@@ -267,519 +267,12 @@ class GameEngine {
           { id: 4, color: { r: 33, g: 148, b: 214 }, position: 0.6 },
           { id: 5, color: { r: 8, g: 132, b: 206 }, position: 1 },
         ]
-      },
-      {
-        keyframe: 5500,
-        points: [
-          { id: 0, color: { r: 122, g: 63, b: 189 }, position: 0 },
-          { id: 1, color: { r: 122, g: 63, b: 189 }, position: 0.07 },
-          { id: 2, color: { r: 75, g: 0, b: 175 }, position: 0.14 },
-          { id: 3, color: { r: 68, g: 0, b: 163 }, position: 0.48 },
-          { id: 4, color: { r: 55, g: 0, b: 133 }, position: 0.81 },
-          { id: 5, color: { r: 39, g: 0, b: 99 }, position: 1 },
-        ]
-      },
+      }
     ], this.canvas, this.ctx);
 
-    this.cloudFall = new ParticleFall({
-      canvas: this.canvas,
-      ctx: this.ctx,
-      amount: 15,
-      generationParams: {
-        scale: { min: 0.1, max: 0.5 },
-        rotation: { min: -3, max: 3 },
-        images: [estrela],
-      },
-      fallCondition: () => {
-        return this.ceu.mayRise;
-      },
-      fallBehaviour: (item, canvas) => {
-        if (item) {
-          item.position.y += item.speed.y;
-          item.position.x += item.speed.x;
-        }
-      },
-      resetTest: (item, canvas) => {
-        var retorno = false;
-
-        if (item.position.y > canvas.height)
-          retorno = true;
-        else if (item.position.x > canvas.width * 1.2 || item.position.x < canvas.width * -0.2)
-          retorno = true;
-
-        return retorno;
-      },
-      generateBehaviour: (item, params) => {
-
-        item.scale = (randomInt(5, 55) / 100) * (params.scale.max - params.scale.min) + params.scale.min;
-        item.rotation = (randomInt(0, 100) / 100) * (params.rotation.max - params.rotation.min) + params.rotation.min;
-        item.image = params.images[0];
-        item.alpha = ((item.scale / params.scale.max) * 0.3) + 0.7;
-        item.speed = {
-          x: ((randomInt(0, 200) - 100) / 100) * 0.5 * (0.9 * item.scale),
-          y: (randomInt(75, 100) / 100) * (1.2 * item.scale)
-        }
-        item.position = {
-          x: (randomInt(0, 50) / 100) * this.canvas.width,
-          y: this.canvas.height * randomInt(10, 100) / 100
-        };
-        item.pivot = { x: 0.5, y: 0.5 }
-        return item;
-      }
-    })
-    this.cloudFall.generateBehaviour = (item, params) => {
-
-      item.scale = (randomInt(5, 55) / 100) * (params.scale.max - params.scale.min) + params.scale.min;
-      item.rotation = (randomInt(0, 100) / 100) * (params.rotation.max - params.rotation.min) + params.rotation.min;
-      item.image = params.images[0];
-      item.alpha = ((item.scale / params.scale.max) * 0.3) + 0.7;
-      item.speed = {
-        x: ((randomInt(0, 200) - 100) / 100) * 0.5 * (0.9 * item.scale),
-        y: (randomInt(75, 100) / 100) * (1.2 * item.scale)
-      }
-      item.position = {
-        x: (randomInt(0, 50) / 100) * this.canvas.width,
-        y: -this.canvas.height * randomInt(0, 30) / 100
-      };
-      item.pivot = { x: 0.5, y: 0.5 }
-      return item;
-    }
-
-    this.spaceship = new Nave2D({
-      initialPosition: {
-        x: () => { return this.canvas.width * 0.5; },
-        y: () => { return 0.94 * this.canvas.height; },
-      },
-      position: {
-        x: 0.5 * this.canvas.width,
-        y: 1 * this.canvas.height,
-      },
-      pivot: {
-        x: 0.5,
-        y: 1,
-      },
-      accel: { x: 0.085, y: 0.0370 },
-      speed: { x: 0, y: 0 },
-      maxSpeed: { x: 5, y: 7.5 },
-      iddleFriction: { x: 0.95, y: 0.85 },
-      zoom: 1,
-      image: spaceBus,
-      canvas: this.canvas,
-      ctx: this.ctx,
-      rockets: {
-        left: [
-          new ParticleFire({
-            canvas: this.canvas,
-            ctx: this.ctx,
-            position: {
-              y: 0,
-              x: -0.28
-            },
-            scale: { x: 1, y: 0.5 },
-            image: rocketFire
-          })],
-        right: [
-          new ParticleFire({
-            canvas: this.canvas,
-            ctx: this.ctx,
-            position: {
-              y: 0,
-              x: 0.22
-            },
-            scale: { x: 1, y: 0.5 },
-            image: rocketFire
-          })],
-        central: [
-          new ParticleFire({
-            canvas: this.canvas,
-            ctx: this.ctx,
-            position: {
-              y: -0.1,
-              x: 0
-            },
-            scale: { x: 1, y: 0.75 },
-            image: rocketFire
-          })],
-      }
-    })
-
-    this.layeredBackground = new MultilayerBackground({
-      canvas: this.canvas,
-      ctx: this.ctx,
-      layers: [
-        // { depth: 70, image: montanha6, sizes: { x: (layer) => { return this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 568 } }, offset: { x: 0, y: -530 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.25 },
-        // { depth: 65, image: montanha5, sizes: { x: (layer) => { return this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 568 } }, offset: { x: 0, y: -520 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.25 },
-        // { depth: 60, image: montanha4, sizes: { x: (layer) => { return this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 568 } }, offset: { x: 0, y: -480 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.25 },
-        // { depth: 55, image: montanha3, sizes: { x: (layer) => { return this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 568 } }, offset: { x: 0, y: -450 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.25 },
-        // { depth: 50, image: montanha2, sizes: { x: (layer) => { return this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 568 } }, offset: { x: 0, y: -490 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.25 },
-        // { depth: 45, image: montanha1, sizes: { x: (layer) => { return this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 568 } }, offset: { x: 0, y: -370 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.25 },
-
-        // { depth: 40, image: campo, sizes: { x: (layer) => { return (this.layout == 'mobile') ? this.canvas.width * 2 : this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 900 } }, offset: { x: 100, y: -200 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.6 },
-        // { depth: 35, image: campo, sizes: { x: (layer) => { return (this.layout == 'mobile') ? this.canvas.width * 2 : this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 900 } }, offset: { x: 0, y: -180 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.5 },
-        // // { depth: 35, image: campo, sizes: { x: (layer) => { return this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 568 } }, offset: { x: 0, y: -210 }, pivot: { x: 0, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.5 },
-        // { depth: 30, image: plataforma, sizes: { x: (layer) => { return this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale } }, offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.5 },
-      ],
-      riseSpeed: 0.5,
-      currentHeight: 0,
-      depth: 150,
-      backgroundSpeed: 2,
-      frontSpeed: 6,
-    });
-
-    const initialCheckpoints = {
-      // param1: 6,
-      // param2: 36,
-      // operation: '÷',
-      // readyToBeSolved: '=',
-
-      param1: false,
-      param2: false,
-      operation: false,
-      readyToBeSolved: false
-    }
-
-    this.stageBuilder = new ChallengeDynamicBuilder({
-      currentSpeed: 1,
-      speedStep: 0.15,
-      param1Range: [2, 2, 2, 3, 4],
-      param2Range: [2, 3, 4, 5, 6, 7],
-      currentCheckpoints: initialCheckpoints,
-      currentCheckpointCount: 0,
-      chooseNextChallenge: () => {
-        this.stageBuilder.updateCheckpointCounter();
-
-        const maxCheckpoints = 4;
-        const minCheckpointsWanted = (this.stageBuilder.currentCheckpointCount < 4) ? 1 : 0;
-        const maxCheckpointsWanted = (maxCheckpoints - this.stageBuilder.currentCheckpointCount);
-
-        const checkPointsWanted = randomInt(minCheckpointsWanted, maxCheckpointsWanted + 1);
-        // consolelog(minCheckpointsWanted, maxCheckpointsWanted, this.stageBuilder.currentCheckpointCount, checkPointsWanted)
-        // consolelog(this.stageBuilder.currentCheckpointCount, checkPointsWanted, minCheckpointsWanted, maxCheckpointsWanted + 1);
-        if (checkPointsWanted > 0) {
-          var newChallenge = this.layoutManager.randomNextChallengeByCheckpoints(checkPointsWanted);
-          this.stageBuilder.buildChallenge(newChallenge);
-          this.layoutManager.estado = 'challenge';
-        } else if (this.layoutManager.estado != "question") {
-          var newQuestion = this.layoutManager.randomNextQuestion();
-          this.stageBuilder.buildQuestion(newQuestion);
-          // this.layoutManager.estado = 'question';
-        }
-        // consolelog('checkPointsWanted =' + checkPointsWanted, newChallenge);
-
-        // randomNextChallengeByCheckpoints
-        // console.log(this.layoutManager);
-        // this.layoutManager.randomNextChallenge();
-      },
-      buildChallenge: (stage) => { //Converte as nuvens de um desafio em checkpoints coletáveis
-        // console.log('nova faze para ser formada', stage);
-
-        var tempCurrCheckpoint = this.stageBuilder.currentCheckpointCount;
-        var lastNeighbour = undefined;
-
-        var checkpointValue = "", generateCheckpointValue = undefined;
-        var possibilities = [];
-
-        var param1Pushed = false;
-        var param2Pushed = false;
-
-
-        if (this.stageBuilder.currentCheckpoints.param1 == false) {
-          param1Pushed = true;
-          possibilities.push(() => {
-            generateCheckpointValue = (myObj) => {
-              if (this.lastRandomParam1 == undefined) {
-                checkpointValue = shuffle([...this.stageBuilder.param1Range])[0];
-                this.lastRandomParam1 = checkpointValue;
-              }
-              myObj.properties.checkpointValue = this.lastRandomParam1;
-            }
-          })
-        }
-
-        const tryPushParam2 = () => {
-          if (this.stageBuilder.currentCheckpoints.param2 == false && this.lastRandomParam1 && param2Pushed == false) {
-            param2Pushed = true;
-            possibilities.push(() => {
-              generateCheckpointValue = (myObj) => {
-                checkpointValue = shuffle([...this.stageBuilder.param2Range])[0];
-                engine.divisionAnswer = checkpointValue;
-                myObj.properties.checkpointValue = this.lastRandomParam1 * checkpointValue;
-              }
-            })
-          }
-        }
-
-        if (this.stageBuilder.currentCheckpoints.operation == false) {
-          possibilities.push(() => {
-            generateCheckpointValue = (myObj) => {
-              myObj.properties.checkpointValue = "÷";
-            }
-          })
-        }
-        if (this.stageBuilder.currentCheckpoints.readyToBeSolved == false) {
-          possibilities.push(() => {
-            generateCheckpointValue = (myObj) => {
-              myObj.properties.checkpointValue = "=";
-            }
-          })
-        }
-
-
-        stage.objects.map(obj => {
-          if (obj.properties.type == 'checkpoint') {
-            tryPushParam2();
-
-            if (lastNeighbour) {
-              lastNeighbour.properties.nextCheckpoint = obj;
-              obj.properties.previousCheckpoint = lastNeighbour;
-            }
-
-            if (possibilities.length == 0) {
-              console.log("Erro! Sem possibilidade de checkpoints")
-            }
-
-            const currentPossibilityIdx = randomInt(0, possibilities.length);
-            const currPossibility = possibilities[currentPossibilityIdx];
-            currPossibility();
-            possibilities.splice(currentPossibilityIdx, 1);
-
-            lastNeighbour = obj;
-            obj.properties.generateCheckpointValue = generateCheckpointValue;
-            obj.properties.generateCheckpointValue(obj);
-          }
-        })
-      },
-      buildQuestion: (stage) => {
-        // console.log(stage, 'Hora de construir a questão');
-
-        var answerAmount = 0;
-        stage.objects.map((obj, idx) => {
-          if (obj.properties.type == 'result-option') {
-            answerAmount++;
-          }
-        });
-
-        var answerType = ['T'];
-        while (answerType.length < answerAmount) {
-          answerType.push('F');
-        }
-        answerType = shuffle(answerType);
-
-        const param1 = this.stageBuilder.currentCheckpoints.param1;
-        const param2 = this.stageBuilder.currentCheckpoints.param2;
-        const expectedAnswer = param2 / param1;
-
-        this.stageBuilder.expectedAnswer = expectedAnswer;
-
-        var resultPool = [];
-        stage.objects.map(obj => {
-          if (obj.properties.type == 'result-option') {
-            resultPool.push(obj);
-          }
-        });
-
-        var idx = 0;
-        var usedWrongAnswers = [];
-
-        var candidates = [];
-        // candidates.push(param1 + expectedAnswer);
-        // if (param1 != expectedAnswer)
-        //   candidates.push(Math.abs(param1 - expectedAnswer));
-
-        // debugger;
-
-        stage.objects.map(obj => {
-          if (obj.properties.type == 'result-option') {
-            obj.properties.allResults = resultPool;
-
-            if (answerType[idx] == 'T') {
-              obj.properties.checkpointValue = expectedAnswer;
-            }
-            else {
-
-              const limit = 3;
-              var tries = 0;
-              var newWrongAnswer = undefined;
-
-              do {
-                if (tries >= limit || candidates.length == 0) {
-                  const newCandidate = randomInt(Math.ceil(Math.min(param1, (param2 / param1)) / 2), Math.min(param1, (param2 / param1)) * 4);
-                  if (usedWrongAnswers.indexOf(newCandidate) == -1)
-                    candidates.push(newCandidate);
-                }
-
-                newWrongAnswer = candidates[randomInt(0, candidates.length)];
-                tries++;
-              } while (newWrongAnswer == expectedAnswer || newWrongAnswer == undefined)
-              candidates.remove(newWrongAnswer);
-              usedWrongAnswers.push(newWrongAnswer);
-              obj.properties.checkpointValue = newWrongAnswer;
-            }
-
-            idx++;
-          }
-        });
-      }
-    })
-    this.layoutManager = new ObjectLayoutReader({
-      velocidade: 2.5,
-      canvas: this.canvas,
-      ctx: this.ctx,
-      currentDificultyLevel: 0,
-      currentLayoutIdx: 0,
-      currentOffset: { x: 0, y: this.canvas.height * 0.33 },
-      layoutSrc: '../../data/stage0.tmx',
-      imgScale: 0.5,
-      coordScale: 2,
-      layoutsToUse: [
-        { name: 'Challenge 1' },
-        // { name: 'Challenge 2' },
-        // { name: 'Challenge 3' }
-      ],
-      objectPrefabs: [
-        //pink-crystal
-        {
-          typename: 'pink-crystal', image: safiraDaSabedoria, scale: 0.10, pivot: { x: 0.5, y: 0.5 },
-          update: (item) => {
-
-          },
-          oncollect: (item) => {
-            onColetarCrystal(5, item);
-            return true;
-          }
-        },
-        //crystal
-        {
-          typename: 'crystal', image: crystalDaRiqueza, scale: 0.15, pivot: { x: 0.5, y: 0.5 },
-          update: (item) => {
-
-          },
-          oncollect: (item) => {
-            onColetarCrystal(1, item);
-            return true;
-          }
-        },
-        //checkpoint
-        {
-          typename: 'checkpoint', image: Nuvem1, scale: 0.15, pivot: { x: 0.48, y: 0.5 },
-          update: (item) => {
-            var fontSize = 28;
-            this.ctx.font = "bold " + fontSize + "px sans-serif";
-            this.ctx.fillStyle = "#000";
-            this.ctx.textBaseline = "middle";
-            this.ctx.textAlign = "center";
-
-            // console.log(item)
-
-            this.ctx.fillText(
-              item.properties.checkpointValue,
-              item.rectCollider.x + item.rectCollider.w * 0.5,
-              item.rectCollider.y + item.rectCollider.h * 0.55,
-              200
-            );
-
-          },
-          ondestroy: (item) => {
-            // console log("o jogador não conseguiu coletar este item", item);
-
-            // const advanceCheckpointValues = (checkpoint) => {
-            //   if (checkpoint.properties.nextCheckpoint) {
-            //     advanceCheckpointValues(checkpoint.properties.nextCheckpoint)
-            //   }
-            //   if (checkpoint.properties.previousCheckpoint) {
-            //     checkpoint.properties.generateCheckpointValue = checkpoint.properties.previousCheckpoint.properties.generateCheckpointValue;
-            //     checkpoint.properties.generateCheckpointValue(checkpoint);
-            //   }
-            // }
-            // advanceCheckpointValues(item);
-          },
-          personalRender: (item) => {
-
-          },
-          oncollect: (item) => {
-            // consolelog('checkpoint coletado', item.properties.checkpointValue)
-            // consolelog('checkpoint coletado', item)
-
-            // Dá play num som
-            if (sounds.sfx.checkpointPickup) {
-              sounds.sfx.checkpointPickup.currentTime = 0;
-              sounds.sfx.checkpointPickup.play();
-              sounds.sfx.checkpointPickup.muted = false;
-            }
-
-            this.stageBuilder.onCollectCheckpointPiece(item);
-          }
-        },
-        // result option
-        {
-          typename: 'result-option', image: nuvemIris, scale: 0.20, pivot: { x: 0.48, y: 0.46 },
-          update: (item) => {
-            var fontSize = 32;
-            this.ctx.font = "bold " + fontSize + "px sans-serif";
-            this.ctx.fillStyle = "#000";
-            this.ctx.textBaseline = "middle";
-            this.ctx.textAlign = "center";
-
-            // console.log(item)
-
-            this.ctx.fillText(
-              item.properties.checkpointValue,
-              item.rectCollider.x + item.rectCollider.w * 0.6,
-              item.rectCollider.y + item.rectCollider.h * 0.5,
-              200
-            );
-          },
-          destroy: (item) => {
-            // console.log(item);
-            item.activeCollider = false;
-            item.mustRender = false;
-          },
-          ondestroy: (item) => {
-            // console log("o jogador não conseguiu coletar este item", item);
-
-            // const advanceCheckpointValues = (checkpoint) => {
-            //   if (checkpoint.properties.nextCheckpoint) {
-            //     advanceCheckpointValues(checkpoint.properties.nextCheckpoint)
-            //   }
-            //   if (checkpoint.properties.previousCheckpoint) {
-            //     checkpoint.properties.generateCheckpointValue = checkpoint.properties.previousCheckpoint.properties.generateCheckpointValue;
-            //     checkpoint.properties.generateCheckpointValue(checkpoint);
-            //   }
-            // }
-            // advanceCheckpointValues(item);
-          },
-          personalRender: (item) => {
-
-          },
-          oncollect: (item) => {
-            // consolelog('resposta coletado', item.properties.checkpointValue)
-            // console.log('resposta coletado', item)
-            const valorRespostaColetada = item.properties.checkpointValue;
-            const operationString = this.stageBuilder.currentCheckpoints.param1 + ' x ' + this.stageBuilder.currentCheckpoints.param2;
-            // console.log('R = ' + valorRespostaColetada);
-
-            // this.stageBuilder.onCollectCheckpointPiece(item);
-            if (valorRespostaColetada == this.stageBuilder.expectedAnswer) {
-              onAcertarQuestao(valorRespostaColetada, this.stageBuilder.expectedAnswer, operationString);
-            }
-            else {
-              onErrarQuestao(valorRespostaColetada, this.stageBuilder.expectedAnswer, operationString, item);
-            }
-          }
-        }
-      ],
-      chooseNextChallenge: () => {
-        this.stageBuilder.chooseNextChallenge();
-      },
-    });
-    this.layoutManager.readChallenges();
-
     // === Set HUD
-    this.crystalCounter = new HUDCounter(5, 'txt_qtd-moedas');
     this.frag = new FragManager();
     this.heartHUD = new HeartHUD(5, ['#vida1', '#vida2', '#vida3', '#vida4', '#vida5'], args => { onGameOver() }, 5); // this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3']);
-    this.acertosHUD = new AcertosHUD('.q-slot', 0, () => { this.onWinGame(); })
-    this.rocketCounterHUD = new RocketCounterHUD('#rocket-counter', 3); //Contador regressivo
 
     // === Eventos importantes no jogo
     const onAcertarQuestao = (answerGiven, rightAnswer, questionString) => {
@@ -962,12 +455,8 @@ class GameEngine {
     }
 
     var setRising = (boolean = true) => {
-      this.spaceship.turnedOn = boolean;
       this.ceu.mayRise = boolean;
-      this.layeredBackground.mayRise = boolean;
-      this.layoutManager.mayRise = boolean;
     }
-    this.spaceship.turnedOn = true;
     this.ceu.mayRise = true;
 
     // =========================== Filminho inicial
@@ -994,7 +483,7 @@ class GameEngine {
         }, 10);
       }
     }
-    filminhoInicial();
+    // filminhoInicial();
   }
 
   update(deltaTime) {
@@ -1007,27 +496,23 @@ class GameEngine {
       // Advance or Generate Layout
       if (this.gamepaused != true) {
         if (this.analogic && this.analogic.draging) {
-          this.spaceship.readTouchMovimentation(this.analogic);
+          // this.spaceship.readTouchMovimentation(this.analogic);
         } else {
-          this.spaceship.readMovimentation(this.inputManager, { up: InputManager.Keys.Up_Arrow, left: InputManager.Keys.Left_Arrow, right: InputManager.Keys.Right_Arrow, down: InputManager.Keys.Down_Arrow }) //Update Ship Movimentation By Keys
+          // this.spaceship.readMovimentation(this.inputManager, { up: InputManager.Keys.Up_Arrow, left: InputManager.Keys.Left_Arrow, right: InputManager.Keys.Right_Arrow, down: InputManager.Keys.Down_Arrow }) //Update Ship Movimentation By Keys
         }
-        this.spaceship.fisica(deltaTime);
+        // this.spaceship.fisica(deltaTime);
 
 
         //Update Colliders
-        if (this.spaceship.rectCollider) {
-          var collisions = this.layoutManager.checkcollision(this.spaceship.rectCollider); //Check Ship Collisions with Collectibles and Checkpoints      
-          collisions.map(col => {
-            if (!col.oncollect(col)) {
-              col.mustRender = false;
-              col.activeCollider = false;
-            }
-          })
-        }
-        //Check Ship Collisions with Hazards
-        //Check Ship Collisions with Colliders
-        if (this.crystalCounter)
-          this.crystalCounter.updateHUD();
+        // if (this.spaceship.rectCollider) {
+        //   var collisions = this.layoutManager.checkcollision(this.spaceship.rectCollider); //Check Ship Collisions with Collectibles and Checkpoints      
+        //   collisions.map(col => {
+        //     if (!col.oncollect(col)) {
+        //       col.mustRender = false;
+        //       col.activeCollider = false;
+        //     }
+        //   })
+        // }
       }
 
       this.engineAudioLoop(); //Control Ship Sound
@@ -1039,11 +524,8 @@ class GameEngine {
   tryRenderThings() {
     //Draw Cenario
     this.ceu.render(); // Sky BG    
-    this.layeredBackground.render(); // Layered BG
-    this.cloudFall.render(); //Clouds
-    //Draw Enfeites    
-    this.spaceship.drawNave(); //Draw Spaceship
-    this.layoutManager.render(); //Draw Stage Layout
+    //Draw Enfeites        
+
     //Obstacles 
     //Pickups    
     //Draw Equation Progress
@@ -1176,29 +658,9 @@ canvas.addEventListener("click", function () {
 // ========================================= Carrega recursos
 var sheetLoader = new SheetLoader();
 // Scenery
-const bg = sheetLoader.queueSheet('../../img/stage1/bg-foguete.png');
-const nuvem_cenario = sheetLoader.queueSheet('../../img/stage1/nuvem_cenario.png');
-const estrela = sheetLoader.queueSheet('../../img/stage1/Estrela.png');
-const plataforma = sheetLoader.queueSheet('../../img/stage1/Plataforma.png');
-const campo = sheetLoader.queueSheet('../../img/stage1/campo.png');
-const montanha1 = sheetLoader.queueSheet('../../img/stage1/Montanha1.png');
-const montanha2 = sheetLoader.queueSheet('../../img/stage1/Montanha2.png');
-const montanha3 = sheetLoader.queueSheet('../../img/stage1/Montanha3.png');
-const montanha4 = sheetLoader.queueSheet('../../img/stage1/Montanha4.png');
-const montanha5 = sheetLoader.queueSheet('../../img/stage1/Montanha5.png');
-const montanha6 = sheetLoader.queueSheet('../../img/stage1/Montanha6.png');
+const bg = sheetLoader.queueSheet('../../img/stage1/bg-circo.png');
 
-// Player's Rocket
-const spaceBus = sheetLoader.queueSheet('../../img/stage1/SpaceBus.png');
-const rocketFire = sheetLoader.queueSheet('../../img/stage1/rocketFire.png');
-
-// Coletáveis
-const crystalDaRiqueza = sheetLoader.queueSheet('../../img/stage1/CristalDaRiqueza.png');
-const safiraDaSabedoria = sheetLoader.queueSheet('../../img/stage1/SafiraDaSabedoria.png');
 const chevronup = sheetLoader.queueSheet('../../img/stage1/chevron-up-solid.svg');
-const nuvemIris = sheetLoader.queueSheet('../../img/stage1/Nuvem1.png');
-const Nuvem1 = sheetLoader.queueSheet('../../img/stage1/nuvem-iris.png');
-
 const analogicCircle = sheetLoader.queueSheet('../../img/ui/analogicCircle.png');
 
 // ======================= Audio Loading
