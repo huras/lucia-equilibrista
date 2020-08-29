@@ -738,6 +738,10 @@ class GameEngine {
   }
 
   update(deltaTime) {
+    if (this.layout2 == 'm') {
+      document.body.classList.add("mobile");
+    }
+
     // console.log(this.currentScene)
     this.generalScale = 1;
     this.layoutIsMobile = window.mobileAndTabletCheck();
@@ -929,7 +933,7 @@ canvas.addEventListener("click", function () {
 // ========================================= Carrega recursos
 var sheetLoader = new SheetLoader();
 // Scenery
-const bg = sheetLoader.queueSheet('../../img/stage1/bg-circo.png');
+const bg = sheetLoader.queueSheet('../../img/stage1/campo - Copia.png');
 const corda_bamba = sheetLoader.queueSheet('../../img/stage1/corda-bamba.png');
 const rodaGig = sheetLoader.queueSheet('../../img/stage1/roda-gigante-static.svg');
 const circus = sheetLoader.queueSheet('../../img/stage1/circo.png');

@@ -345,7 +345,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endCo
   border: 2px solid rgba(255, 255, 255, 0.589);
 }
 
-@media(max-width: 768px){
+body.mobile 
   .moeda{
    top: 56px;
    bottom: unset;
@@ -355,7 +355,7 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endCo
     align-items: center;
     bottom: auto; */
   }
-}
+
 
 .moeda span {
   margin: 0px 2px;
@@ -716,12 +716,12 @@ filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#000000",endCo
   }
 }
 
-@media(max-width:768px){
+body.mobile 
   .conta{
-    top: calc(42px + 3vh);
+    top: calc(46px + 3vh);
     /* left: 17vw; */
   }
-}
+
 
 .local-resp{
   display: flex;
