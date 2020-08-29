@@ -708,6 +708,8 @@ position: relative;
   min-width: 170px;
   height: 68px;
 
+  white-space: nowrap;
+  padding: 0px 16px;
   color: #fff;
   font-size: 36px;
   font-weight: bold;
@@ -738,8 +740,9 @@ body.mobile
 
   border-radius: 50%;
   line-height: 1;
-  width: 20%;
-  height: 40px;
+  min-width: 20%;
+  padding: 0px 6px;
+  height: 48px;
   font-size: 36px;
   font-weight: bold;
   font-family: sans-serif;
