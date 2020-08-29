@@ -46,7 +46,7 @@ var lala = undefined;
 function drag(ev) {
   //console.log('drag')
   lala = ev.target.innerHTML;
-  ev.dataTransfer.setData("text", ev.target.innerHTML);
+  ev.dataTransfer.setData("text", ev.target.getAttribute('valor'));
   ev.dataTransfer.setData("color", ev.target.classList);
 }
 
@@ -458,41 +458,65 @@ class GameEngine {
 
     this.perguntas = [
       {
-        q: '1 ÷ 1 =', //questão
-        r: 1          //resposta
+        q: '7 + 3 =', //questão
+        r: 10,         //resposta
+        o: [11, 12, 9, 13]
       },
       {
-        q: '2 ÷ 1 =',
-        r: 2
+        q: '5 + 5 =',
+        r: 10,
+        o: [9, 11, 12, 8]
       },
       {
-        q: '3 ÷ 1 =',
-        r: 3
+        q: '8 + 5 =',
+        r: 13,
+        o: [12, 11, 14, 10]
       },
       {
-        q: '4 ÷ 1 =',
-        r: 4
+        q: '7 + 1 =',
+        r: 8,
+        o: [7, 6, 9, 10]
       },
       {
-        q: '5 ÷ 1 =',
-        r: 5
+        q: '4 + 5 =',
+        r: 9,
+        o: [7, 10, 8, 11]
       },
       {
-        q: '6 ÷ 1 =',
-        r: 6
+        q: '3 + 9 =',
+        r: 12,
+        o: [11, 13, 14, 10]
       },
       {
-        q: '7 ÷ 1 =',
-        r: 7
+        q: '8 + 2 =',
+        r: 10,
+        o: [12, 13, 9, 8]
       },
       {
-        q: '8 ÷ 1 =',
-        r: 8
+        q: '6 + 3 =',
+        r: 9,
+        o: [7, 10, 11, 8]
       },
       {
-        q: '9 ÷ 1 =',
-        r: 9
-      }
+        q: '5 + 6 =',
+        r: 11,
+        o: [10, 12, 13, 9]
+      },
+      {
+        q: '4 + 9 =',
+        r: 13,
+        o: [11, 14, 15, 12]
+      },
+      {
+        q: '3 + 3 =',
+        r: 6,
+        o: [4, 7, 5, 3]
+      },
+      {
+        q: '5 + 7 =',
+        r: 12,
+        o: [14, 15, 10, 11]
+      },
     ];
 
     this.perguntas = shuffle(this.perguntas);
@@ -522,6 +546,42 @@ class GameEngine {
     }
     this.onLoadPergunta = () => {
       this.contaHUD.setOp(this.perguntas[this.perguntaAtual])
+
+      var bandeja = document.querySelector('.bandeja-num');
+      bandeja.innerHTML = '';
+      var pergunta = JSON.parse(JSON.stringify(this.perguntas[this.perguntaAtual]));
+      var cor = 1;
+
+      pergunta.o.push(pergunta.r)
+      pergunta.o = shuffle(pergunta.o)
+      pergunta.o.map((item) => {
+        const opt = document.createElement('div')
+        opt.classList.add('opicao');
+
+        const num = document.createElement('div')
+        num.innerHTML = item + '';
+        num.classList.add('num');
+
+        const val = document.createElement('div')
+
+        val.classList.add('cor' + cor);
+        cor++
+        val.setAttribute('draggable', 'true')
+        val.setAttribute('valor', item)
+        val.ondragstart = (event) => {
+          drag(event)
+        }
+        //
+        val.ondragend = (event) => {
+          dragexit(event)
+        }
+
+        val.appendChild(num)
+        opt.appendChild(val)
+        bandeja.appendChild(opt)
+      })
+
+
     }
     this.onAcertarQuestao = (answerGiven, rightAnswer, questionString) => {
       this.frag.incluirAcerto({

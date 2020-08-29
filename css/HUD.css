@@ -620,8 +620,8 @@ body.mobile
   display: flex;
   align-items: center;
   justify-content: center;
-
-
+  margin: 8px;
+position: relative;
   line-height: 1;
   border-radius: 50%;
   width: 7%;
@@ -634,13 +634,20 @@ body.mobile
 }
 
 .opicao div{
-  width: 7%;
+  min-width: 7%;
   min-width: 40px;
   max-width: 40px;
   display: flex;
   align-items: center;
   border-radius: 50%;
   justify-content: center;
+  position: absolute;
+  padding: 8px;
+  
+}
+
+.opicao .num{
+  background-color: #fff;
 }
 
   .cor1{
