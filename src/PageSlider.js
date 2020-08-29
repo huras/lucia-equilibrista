@@ -7,7 +7,7 @@ var historico = [
   // }
 
   {
-    url: './Cenas/Stage1',
+    url: './Cenas/Stage1/index.html',
     rotation: "landscape-primary",
     // type: 'animation'
   }
@@ -22,6 +22,10 @@ var loadNewScene = (url, rotation, currEngine = undefined, type = undefined,) =>
   if (currEngine) {
     if (currEngine.crystalCounter) {
       loadedData.crystals += currEngine.crystalCounter.counter;
+    }
+
+    if (currEngine.repescagens != undefined) {
+      loadedData.repescagens = currEngine.repescagens;
     }
   }
 
@@ -91,7 +95,7 @@ function attachFunctionsToCurrentIframe() {
 
   iframe.contentWindow.loadedData = loadedData;
   if (miframe.contentWindow.loadPreviousStageData)
-    miframe.contentWindow.loadPreviousStageData();
+    miframe.contentWindow.loadPreviousStageData(loadedData);
   iframe.contentWindow.loadNewScene = (url, rotation, type = undefined) => {
     loadNewScene(url, rotation, type);
   }

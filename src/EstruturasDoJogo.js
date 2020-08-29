@@ -744,6 +744,13 @@ class MultilayerBackground {
     this.layers.map(layer => {
       this.ctx.save();
       var fW = layer.sizes.x(layer), fH = layer.sizes.y(layer);
+
+      if (layer.responsive) {
+        const scaler = layer.responsive(fW, fH);
+        fW *= scaler;
+        fH *= scaler;
+      }
+
       const depthRate = (depth - layer.depth) / depth;
 
 
@@ -1235,7 +1242,10 @@ class HUDCounter {
     if (this.animationDelayCounter > this.animationDelay) {
       this.animationDelayCounter = 0;
       if (this.counterToShow != this.counter) {
-        this.counterToShow = Math.ceil(lerp(this.counterToShow, this.counter, 0.5));
+        this.counterToShow = Math.round(lerp(this.counterToShow, this.counter, 0.5));
+        if (Math.abs(this.counterToShow - this.counter) <= 2) {
+          this.counterToShow = this.counter;
+        }
         this.element.innerHTML = this.counterToShow;
       }
     }
@@ -1482,3 +1492,127 @@ class FaseManager {
     this.stages = stages;
   }
 }
+
+class ResponsiveRect {
+  constructor(options) {
+    this.rect = options.rect || { x: () => { return undefined }, y: () => { return undefined }, w: () => { return undefined }, h: () => { return undefined } };
+  }
+
+  getRect() {
+    return {
+      x: this.rect.x(this) || 0,
+      y: this.rect.y(this) || 0,
+      w: this.rect.w(this) || 0,
+      h: this.rect.h(this) || 0,
+    }
+  }
+}
+
+class ArcadePhysicsObject {
+  constructor(options) {
+    this.position = options.position || { x: 0, y: 0 };
+    this.scale = options.scale || { x: 1, y: 1 };
+    this.rotation = options.rotation || 0;
+    this.pivot = options.pivot || { x: 0.5, y: 0.5 };
+
+    this.image = options.image || { x: 0.5, y: 0.5 };
+    this.canvas = options.canvas || undefined;
+    this.ctx = options.ctx || undefined;
+
+    this.responsive = options.responsive || undefined;
+    this.responsiveScaling = options.responsiveScaling || undefined;
+    this.scaler = 1;
+  }
+
+  render() {
+    this.ctx.save();
+    var fW = this.scale.x * this.image.width, fH = this.scale.y * this.image.height;
+
+    if (this.responsiveScaling) {
+      this.scaler = this.responsiveScaling(fW, fH) || 1;
+      fW *= this.scaler;
+      fH *= this.scaler;
+    }
+
+
+    if (this.responsive) {
+      this.responsive(this);
+    }
+
+    this.ctx.translate(this.position.x, this.position.y);
+    this.ctx.rotate(degrees_to_radians(this.rotation));
+    // this.ctx.translate(layer.screenPivot.x * this.canvas.width, layer.screenPivot.y * this.canvas.height);
+    // this.ctx.translate(layer.offset.x * layer.scale, layer.offset.y * layer.scale);
+    this.ctx.drawImage(this.image,
+      this.pivot.x * -fW, this.pivot.y * -fH,
+      fW, fH
+    );
+    this.ctx.restore();
+  }
+}
+
+class DistanceSteper {
+  constructor(startPoint, endPoint, steps = 6, initialStep = 1) {
+    this.startPoint = startPoint;
+    this.endPoint = endPoint;
+    this.steps = steps;
+    this.curentStep = initialStep;
+    this.currentPosition = initialStep;
+    this.easing = .02;
+  }
+
+  update() {
+    if (this.curentStep != this.currentPosition) {
+
+      var step = Math.sign(this.curentStep - this.currentPosition) *
+        this.easing;
+      var dist = (this.curentStep - this.currentPosition)
+      if (Math.abs(step) > Math.abs(dist)) {
+        step = dist;
+      }
+      this.currentPosition += step;
+    }
+    //console.log(this.currentPosition)
+  }
+
+  goToStep(valor) {
+    this.curentStep = valor;
+  }
+
+  nextStep() {
+    if (this.curentStep + 1 <= this.steps) {
+      this.goToStep(this.curentStep + 1)
+    }
+  }
+}
+
+class ContaHUD {
+  constructor(options) {
+    this.element = document.querySelector(options.selector);
+  }
+
+  setOp(conta) {
+    console.log(conta, this.element)
+
+    this.element.innerHTML = conta.q;
+    this.conta = conta;
+  }
+
+  checaConta(valor) {
+    if (this.conta.r == parseInt(valor)) {
+      return true
+    } else {
+      return false
+    }
+  }
+}
+
+
+
+
+
+
+
+
+// 10:46
+// R$ 4,20 / h

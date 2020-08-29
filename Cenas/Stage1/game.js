@@ -18,6 +18,70 @@ function setFrag(frag) {
   engine.frag = frag;
 }
 
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function somEnunciado() {
+  if (sounds.sfx.ingameEnunciado) { // Dá play num som
+    sounds.sfx.ingameEnunciado.currentTime = 0;
+    sounds.sfx.ingameEnunciado.play();
+    sounds.sfx.ingameEnunciado.muted = false;
+  }
+}
+
+function dragexit(ev) {
+  var data = lala;
+  if (lala != undefined) {
+    //console.log(data)
+    if (!engine.contaHUD.checaConta(parseInt(data))) {
+      engine.onErrarQuestao(-1, engine.contaHUD.conta.r, engine.contaHUD.conta.q, false)
+    }
+  }
+  lala = undefined;
+}
+
+var lala = undefined;
+
+function drag(ev) {
+  //console.log('drag')
+  lala = ev.target.innerHTML;
+  ev.dataTransfer.setData("text", ev.target.innerHTML);
+  ev.dataTransfer.setData("color", ev.target.classList);
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData("text");
+  if (engine.onDarResposta(parseInt(data))) {
+    ev.target.innerHTML = data;
+    ev.target.classList = ev.dataTransfer.getData("color");
+    ev.target.classList.add('local-resp')
+  }
+  lala = undefined;
+}
+
+var loadedData = undefined;
+function loadPreviousStageData(dados) {
+
+  if (engine) {
+    if (loadedData != undefined) {
+      if (loadedData.repescagens == undefined) {
+        engine.repescagens = 0;
+      } else {
+        engine.repescagens = loadedData.repescagens + 1;
+      }
+
+      document.getElementById('vezes-r').innerHTML = (3 - engine.repescagens);
+      if (engine.repescagens >= 3) {
+        document.getElementById('btn-repescar').style.display = 'none';
+      }
+
+      console.log(engine.repescagens);
+    }
+  }
+}
+
 // =================================================== Engine Base
 
 const drawColliders = false;
@@ -103,14 +167,15 @@ class GameEngine {
     }
   }
 
-
-
   start() {
     if (debugEngine)
       console.log('Engine iniciada!');
 
     this.changeState(engineStates.StagePlaying);
     this.gameLoop();
+    somEnunciado();
+
+
   }
 
   gameLoop() {
@@ -121,6 +186,7 @@ class GameEngine {
     this.lastExecution = performance.now();
 
     this.layout = window.mobileAndTabletCheck() ? "mobile" : "desktop";
+    this.layout2 = window.mobileAndTabletCheck() ? "m" : "d";
 
     // this.fps = 1 / (deltaTime / 1000);
     // if (this.fpsBuffer.length + 1 > this.fpsmaxFPSBuffer) {
@@ -231,17 +297,17 @@ class GameEngine {
       down: InputManager.Keys.Down_Arrow,
     });
 
-    this.analogic = new TouchAnalogic({
-      canvas: this.canvas,
-      ctx: this.ctx,
-      margin: 24,
-      radius: 65,
-      personalizedImage: {
-        image: analogicCircle,
-        scale: 0.1,
-        arrow: chevronup
-      }
-    });
+    // this.analogic = new TouchAnalogic({
+    //   canvas: this.canvas,
+    //   ctx: this.ctx,
+    //   margin: 24,
+    //   radius: 65,
+    //   personalizedImage: {
+    //     image: analogicCircle,
+    //     scale: 0.1,
+    //     arrow: chevronup
+    //   }
+    // });
 
     // === Set Layout
     this.ceu = new BGGradiente([
@@ -283,11 +349,72 @@ class GameEngine {
         // { depth: 40, image: campo, sizes: { x: (layer) => { return (this.layout == 'mobile') ? this.canvas.width * 2 : this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 900 } }, offset: { x: 100, y: -200 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.6 },
         // { depth: 35, image: campo, sizes: { x: (layer) => { return (this.layout == 'mobile') ? this.canvas.width * 2 : this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale * this.canvas.height / 900 } }, offset: { x: 0, y: -180 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.5 },
         {
-          depth: 35,
+          depth: 40,
           image: bg,
           sizes: {
             x: (layer) => { return this.canvas.width + 250 },
             y: (layer) => { return Math.min(layer.image.height, this.canvas.height * 0.7) }
+          },
+          offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
+          screenPivot: { x: 0.5, y: 1 }, scale: 0.5
+        },
+        {
+          depth: 39,
+          image: circus,
+          sizes: {
+            x: (layer) => { return layer.image.width * layer.scale },
+            y: (layer) => { return layer.image.height * layer.scale }
+          },
+          responsive: (w, h) => {
+            if (this.layout == 'mobile') {
+              return 0.35;
+            }
+
+            return 1;
+          },
+          offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
+          screenPivot: { x: 0.55, y: 0.75 }, scale: 0.5
+        },
+        {
+          depth: 38,
+          image: rodaGig,
+          sizes: {
+            x: (layer) => { return layer.image.width * layer.scale },
+            y: (layer) => { return layer.image.height * layer.scale }
+          },
+          responsive: (w, h) => {
+            if (this.layout == 'mobile') {
+              return 0.5;
+            }
+
+            return 2;
+          },
+          offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
+          screenPivot: { x: 0.05, y: 0.70 }, scale: 0.6
+        },
+        {
+          depth: 37,
+          image: carrosel,
+          sizes: {
+            x: (layer) => { return layer.image.width * layer.scale },
+            y: (layer) => { return layer.image.height * layer.scale }
+          },
+          responsive: (w, h) => {
+            if (this.layout == 'mobile') {
+              return 0.75;
+            }
+
+            return 2;
+          },
+          offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
+          screenPivot: { x: 0.75, y: 0.8 }, scale: 0.3
+        },
+        {
+          depth: 34,
+          image: corda_bamba,
+          sizes: {
+            x: (layer) => { return this.canvas.width * 0.85 },
+            y: (layer) => { return this.canvas.height * 0.7 }
           },
           offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
           screenPivot: { x: 0.5, y: 1 }, scale: 0.5
@@ -301,64 +428,156 @@ class GameEngine {
       frontSpeed: 6,
     });
 
+    this.equilibrista = new ArcadePhysicsObject(
+      {
+        canvas: this.canvas,
+        ctx: this.ctx,
+        image: equilibrista,
+        position: { x: this.canvas.width * 0.5, y: this.canvas.height * 0.5 },
+        responsive: (obj) => {
+          obj.position.x = (this.distSteper.currentPosition *
+            (((this.distSteper.endPoint - this.distSteper.startPoint) + this.distSteper.startPoint) / this.distSteper.steps))
+            + this.canvas.width * 0.21;
 
+          obj.position.y = this.canvas.height * 0.7 - 138 * obj.scaler + (this.equilibristaY || 0);
+        },
+        responsiveScaling: (fW, fH) => {
+          if (this.layout2 == 'm') {
+            return (this.canvas.height / 414) * 0.7;
+          }
+        }
+      }
+    );
+
+    this.arcadeObjs = [];
+    this.arcadeObjs.push(this.equilibrista);
+
+    this.distSteper = new DistanceSteper(this.canvas.width * 0.3, this.canvas.width * 0.65, 6, 0);
+
+    // this.distSteper.goToStep(2);
+
+    this.perguntas = [
+      {
+        q: '1 ÷ 1 =', //questão
+        r: 1          //resposta
+      },
+      {
+        q: '2 ÷ 1 =',
+        r: 2
+      },
+      {
+        q: '3 ÷ 1 =',
+        r: 3
+      },
+      {
+        q: '4 ÷ 1 =',
+        r: 4
+      },
+      {
+        q: '5 ÷ 1 =',
+        r: 5
+      },
+      {
+        q: '6 ÷ 1 =',
+        r: 6
+      },
+      {
+        q: '7 ÷ 1 =',
+        r: 7
+      },
+      {
+        q: '8 ÷ 1 =',
+        r: 8
+      },
+      {
+        q: '9 ÷ 1 =',
+        r: 9
+      }
+    ];
+
+    this.perguntas = shuffle(this.perguntas);
+    this.perguntas.splice(6, 4);
+    this.perguntaAtual = 0;
 
     // === Set HUD
+    this.crystalCounter = new HUDCounter(90, 'txt_qtd-moedas');
     this.frag = new FragManager();
-    this.heartHUD = new HeartHUD(5, ['#vida1', '#vida2', '#vida3', '#vida4', '#vida5'], args => { onGameOver() }, 5); // this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3']);
+    this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3'], args => { onGameOver() }, 3); // this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3']);
+    this.contaHUD = new ContaHUD({ selector: '#continha' });
+
+    document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
+    document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
 
     // === Eventos importantes no jogo
-    const onAcertarQuestao = (answerGiven, rightAnswer, questionString) => {
+    this.onDarResposta = (resposta) => {
+
+      var ret = engine.contaHUD.checaConta(resposta)
+      if (ret) {
+        this.onAcertarQuestao(resposta, this.contaHUD.conta.r, this.contaHUD.conta.q)
+      } else {
+        this.onErrarQuestao(resposta, this.contaHUD.conta.r, this.contaHUD.conta.q)
+      }
+
+      return ret
+    }
+    this.onLoadPergunta = () => {
+      this.contaHUD.setOp(this.perguntas[this.perguntaAtual])
+    }
+    this.onAcertarQuestao = (answerGiven, rightAnswer, questionString) => {
       this.frag.incluirAcerto({
         questionString: questionString,
         rightAnswer: rightAnswer,
         answerGiven: answerGiven
       });
 
-      this.acertosHUD.pushRightQuestion();
-      // this.heartHUD.applyDamage(-1);
+      document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
+      setTimeout(() => {
+        document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
+      }, 2500);
 
-      this.stageBuilder.param2Range.splice(this.stageBuilder.param2Range.indexOf(answerGiven), 1);
-      this.stageBuilder.resetCheckpointCounter();
-      this.lastRandomParam1 = undefined;
-      this.stageBuilder.chooseNextChallenge();
-
-      this.acertosHUD.updateHUD();
+      var certo = document.querySelector('.certo-ou-errado .certo')
+      certo.classList.remove('escondido')
 
       if (sounds.sfx.rightAnswer) { // Dá play num som
         sounds.sfx.rightAnswer.currentTime = 0;
         sounds.sfx.rightAnswer.play();
         sounds.sfx.rightAnswer.muted = false;
       }
+
+      this.perguntaAtual++;
+      this.distSteper.nextStep();
+      if (this.distSteper.curentStep + 1 > this.distSteper.steps) {
+        document.querySelector('.result-screen').style.display = 'flex';
+        this.onWinGame();
+      } else {
+        this.onLoadPergunta();
+        setTimeout(() => {
+          document.querySelector('.local-resp').innerHTML = '';
+        }, 2500)
+      }
+
     }
-    const onErrarQuestao = (answerGiven, rightAnswer, questionString, itemCollected) => {
+    this.onErrarQuestao = (answerGiven, rightAnswer, questionString, removeLife = true) => {
       this.frag.incluirErro({
         questionString: questionString,
         rightAnswer: rightAnswer,
         answerGiven: answerGiven
       });
 
-      // this.acertosHUD.pushWrongQuestion();
-      this.stageBuilder.chooseNextChallenge();
-      // if (itemCollected.allResults) {
-      // itemCollected.properties.allResults.map(result => {
-      //   // console.log(;
-      //   // result.destroy(result);
-      //   // result.properties.forceNoRender = true;
+      this.equilibristaCaindo = true;
+      this.equilibristaY = 0;
 
-      //   // result.y -= 150;
-      //   // result.properties.xaimba = 'U'
-      //   // result.mustRender = false;
-      //   // result.activeCollider = false;
-      // })
-      // // console.log(itemCollected);
-      // console.log('==========================');
-      // }
+      document.querySelector('.certo-ou-errado .errado').classList.remove('escondido')
+      setTimeout(() => {
+        this.equilibristaCaindo = false;
+        this.equilibristaY = 0;
+        document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
+      }, 2500)
+      document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
 
-      this.heartHUD.applyDamage(1);
+      if (removeLife)
+        this.heartHUD.applyDamage(1);
       this.heartHUD.updateHUD();
-
-      this.layoutManager.estado = 'challenge';
 
       if (sounds.sfx.wrongAnswer) { // Dá play num som
         sounds.sfx.wrongAnswer.currentTime = 0;
@@ -412,15 +631,13 @@ class GameEngine {
 
     }
     const onGameOver = () => {
+      console.log('guemeouver')
       engineLife++;
-      this.ceu.mayRise = false;
-      this.spaceship.turnedOn = false;
-      this.layeredBackground.mayRise = false;
-      this.layoutManager.mayRise = false;
 
       document.querySelector('.gameover-screen').style.display = 'flex'; //Exibe tela de gameover
 
       // Checa se jogador tem dinheiro o suficiente para reviver
+
       if (this.crystalCounter.counter < revivePrice) {
         document.querySelector(".continuar-button").style.display = 'none'
       } else {
@@ -517,6 +734,7 @@ class GameEngine {
       }
     }
     // filminhoInicial();
+    this.onLoadPergunta();
   }
 
   update(deltaTime) {
@@ -528,11 +746,23 @@ class GameEngine {
       // Define number of Lanes for Layout
       // Advance or Generate Layout
       if (this.gamepaused != true) {
-        if (this.analogic && this.analogic.draging) {
-          // this.spaceship.readTouchMovimentation(this.analogic);
-        } else {
-          // this.spaceship.readMovimentation(this.inputManager, { up: InputManager.Keys.Up_Arrow, left: InputManager.Keys.Left_Arrow, right: InputManager.Keys.Right_Arrow, down: InputManager.Keys.Down_Arrow }) //Update Ship Movimentation By Keys
-        }
+
+        this.distSteper.update();
+
+        if (this.crystalCounter)
+          this.crystalCounter.updateHUD();
+
+        this.distSteper.startPoint = this.canvas.width * 0.3;
+        this.distSteper.endPoint = this.canvas.width * 0.65;
+
+        if (this.equilibristaCaindo)
+          this.equilibristaY += 1.95;
+
+        // if (this.analogic && this.analogic.draging) {
+        // this.spaceship.readTouchMovimentation(this.analogic);
+        // } else {
+        // this.spaceship.readMovimentation(this.inputManager, { up: InputManager.Keys.Up_Arrow, left: InputManager.Keys.Left_Arrow, right: InputManager.Keys.Right_Arrow, down: InputManager.Keys.Down_Arrow }) //Update Ship Movimentation By Keys
+        // }
         // this.spaceship.fisica(deltaTime);
 
 
@@ -546,6 +776,8 @@ class GameEngine {
         //     }
         //   })
         // }
+
+
       }
 
       this.engineAudioLoop(); //Control Ship Sound
@@ -558,6 +790,11 @@ class GameEngine {
     //Draw Cenario
     this.ceu.render(); // Sky BG    
     this.layeredBackground.render(); // Layered BG
+    if (this.arcadeObjs) {
+      this.arcadeObjs.map(obj => {
+        obj.render();
+      })
+    }
     //Draw Enfeites        
 
     //Obstacles 
@@ -566,7 +803,7 @@ class GameEngine {
     //Draw Score
     // this.DesenhaFPS();
 
-    this.analogic.render();
+    // this.analogic.render();
   }
 
   DesenhaFPS() {
@@ -693,6 +930,11 @@ canvas.addEventListener("click", function () {
 var sheetLoader = new SheetLoader();
 // Scenery
 const bg = sheetLoader.queueSheet('../../img/stage1/bg-circo.png');
+const corda_bamba = sheetLoader.queueSheet('../../img/stage1/corda-bamba.png');
+const rodaGig = sheetLoader.queueSheet('../../img/stage1/roda-gigante-static.svg');
+const circus = sheetLoader.queueSheet('../../img/stage1/circo.png');
+const carrosel = sheetLoader.queueSheet('../../img/stage1/carrosel.png');
+const equilibrista = sheetLoader.queueSheet('../../img/stage1/equilibrista.png');
 
 const chevronup = sheetLoader.queueSheet('../../img/stage1/chevron-up-solid.svg');
 const analogicCircle = sheetLoader.queueSheet('../../img/ui/analogicCircle.png');
@@ -709,6 +951,8 @@ var sounds = {
     // nakaOST: document.getElementById("OST-naka"),
     rightAnswer: document.getElementById("SFX-rightAnswer"),
     wrongAnswer: document.getElementById("SFX-wrongAnswer"),
+    enunciado: document.getElementById("ingame-enunciado"),
+    ingameEnunciado: document.getElementById("ingame-enunciado"),
   },
   ost: {
 

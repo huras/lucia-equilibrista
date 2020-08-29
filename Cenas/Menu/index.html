@@ -4,124 +4,118 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title> Roletas </title>
-  <link rel="stylesheet" href="../../css/canvasDefault.css">
-  <link rel="stylesheet" href="../../css/HUD.css">
+  <title> Animation Player </title>
+
+  <style>
+    body {
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        margin: 0;
+      }
+
+      canvas {
+        width: calc(100vw);
+        height: calc(100vh);
+      }
+    }
+
+    .play {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.589);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 777;
+
+      flex-direction: column;
+    }
+
+    .play svg {
+      fill: white;
+      width: 10vw;
+      transform: scaleX(1.1);
+      height: auto;
+      margin-bottom: 32px;
+      animation: pulse 2.5s infinite ease-in-out;
+    }
+
+    .play .texto {
+      font-weight: 700;
+      font-size: 24px;
+      font-family: sans-serif;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1.0);
+      }
+
+      35% {
+        transform: scale(1.4);
+      }
+
+      100% {
+        transform: scale(1.0);
+      }
+    }
+
+    #nextPage {
+      display: flex;
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      animation: pulse2 2s infinite ease-in-out;
+      display: none;
+    }
+
+    @keyframes pulse2 {
+      0% {
+        transform: scale(1.2);
+      }
+
+      45% {
+        transform: scale(1.5);
+      }
+
+      100% {
+        transform: scale(1.2);
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <script src="../../src/babel/bundle.js"></script>
-
-  <!-- <audio preload="automatic" id="SFX-roleta-rodando">
-    <source src="./audio/SFX_roleta-rodando.mp3" type="audio/mp3" />
-  </audio> -->
-
-  <div class='interactableHUD'>
-
-    <div class='menu-screen'>
-      <div class='sol-position'>
-        <img class='sol noInteraction' src="../../img/ui/sol2.png">
-      </div>
-      <img class='titulo' src="../../img/ui/title.png">
-      <div class='acoes'>
-        <div class='botao' onclick="loadNewScene('./Cenas/Stage1', 'portrait-primary')">
-          <img class='btn-inicio' src="../../img/ui/ButtonAzul.png">
-          <span class='lbl'> Iniciar </span>
-        </div>
-
-        <div style='margin-bottom: 32px;'></div>
-
-        <div class='botao' style='transform: scale(0.7);' onclick="instrucoes(1)">
-          <img class='btn-instrucoes' src="../../img/ui/ButtonRoxo.png">
-          <span class='lbl'> Instruções </span>
-        </div>
-      </div>
-      <small class='meta-info-game'> - Tabuada de 6, 7, 8 e 9 - </small>
-    </div>
-
-    <div class='instruction-page1-screen instruction-screen' style='display: none;'>
-      <img src="../../img/instructions/pag1-B.png" style='max-width: 95%;'>
-
-      <div class='dflex flex-column' style='position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);'>
-        <div class='dflex'>
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(0)">
-            <img src="../../img/ui/hand-point-right-solid.svg"
-              style='transform: scaleX(-1); height: 25px; margin-right: 8px'>
-            <span> MENU </span>
-          </button>
-
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(2)">
-            <img src="../../img/ui/hand-point-right-solid.svg" style='height: 25px; margin-right: 8px;'>
-            <span> PRÓXIMO </span>
-          </button>
-        </div>
-      </div>
-      <img onclick="instrucoes(0)" src="../../img/ui/times-circle-solid.svg"
-        style='height: 35px; position: fixed; right: 8px; top: 8px;'>
-      <div style='position: fixed; right: 46%; top: 8px; transform: translateX(-50%);'> 1/3 </div>
-    </div>
-
-    <div class='instruction-page2-screen instruction-screen' style='display: none;'>
-      <img src="../../img/instructions/pag1-A.png" style='max-width: 95%;'>
-
-      <div class='dflex flex-column' style='position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);'>
-        <div class='dflex'>
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(1)">
-            <img src="../../img/ui/hand-point-right-solid.svg"
-              style='transform: scaleX(-1); height: 25px; margin-right: 8px'>
-            <span> VOLTAR </span>
-          </button>
-
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(3)">
-            <img src="../../img/ui/hand-point-right-solid.svg" style='height: 25px; margin-right: 8px;'>
-            <span> PRÓXIMO </span>
-          </button>
-        </div>
-      </div>
-      <img onclick="instrucoes(0)" src="../../img/ui/times-circle-solid.svg"
-        style='height: 35px; position: fixed; right: 8px; top: 8px;'>
-      <div style='position: fixed; right: 46%; top: 8px; transform: translateX(-50%);'> 2/3 </div>
-    </div>
-
-    <div class='instruction-page3-screen instruction-screen' style='display: none;'>
-      <img src="../../img/instructions/pag2-A.png" style='max-width: 95%;'>
-
-      <div class='dflex flex-column' style='position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);'>
-        <div class='dflex'>
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(2)">
-            <img src="../../img/ui/hand-point-right-solid.svg"
-              style='transform: scaleX(-1); height: 25px; margin-right: 8px'>
-            <span> VOLTAR </span>
-          </button>
-
-          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(0)">
-            <img src="../../img/ui/hand-point-right-solid.svg" style='height: 25px; margin-right: 8px;'>
-            <span> MENU </span>
-          </button>
-        </div>
-      </div>
-      <img onclick="instrucoes(0)" src="../../img/ui/times-circle-solid.svg"
-        style='height: 35px; position: fixed; right: 8px; top: 8px;'>
-      <div style='position: fixed; right: 46%; top: 8px; transform: translateX(-50%);'> 3/3 </div>
-    </div>
-
+  <div class='play'>
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14"
+      role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+      <path
+        d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z">
+      </path>
+    </svg>
+    <div class='texto'> Iniciar</div>
   </div>
 
-  <div class='noInteractionHUD'>
-    <div>
-      <!-- Vazio -->
-    </div>
+  <div id='nextPage' onclick="loadNewScene('./Cenas/Stage1/index.html', 'landscape-primary')">
+    <img src="./img/nav-button.png">
   </div>
 
-    <canvas id='canvas'></canvas>
-
-    <!-- <audio preload="automatic" id="OST-naka" muted>
-    <source src="../../audio/ostNaka.mp3" type="audio/mp3" />
-  </audio> -->
-
-    <!-- <script src="transpiled.js"></script> -->
-    <script src="menu.js"></script>
+  <canvas id='canvas'> </canvas>
+  <script src="animationPlayer_trans.js"> </script>
+  <script src="introduction_trans.js"> </script>
+  <!-- <script src="introduction.js"> </script> -->
 </body>
 
 </html>
