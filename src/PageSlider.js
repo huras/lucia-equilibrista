@@ -7,7 +7,7 @@ var historico = [
   // }
 
   {
-    url: './Cenas/Stage1/index.html',
+    url: './Cenas/Menu/index.html',
     rotation: "landscape-primary",
     // type: 'animation'
   }
