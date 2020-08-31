@@ -524,7 +524,7 @@ class GameEngine {
     this.perguntaAtual = 0;
 
     // === Set HUD
-    this.crystalCounter = new HUDCounter(90, 'txt_qtd-moedas');
+    this.crystalCounter = new HUDCounter(60, 'txt_qtd-moedas');
     this.frag = new FragManager();
     this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3'], args => { onGameOver() }, 3); // this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3']);
     this.contaHUD = new ContaHUD({ selector: '#continha' });

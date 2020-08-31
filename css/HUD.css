@@ -829,3 +829,20 @@ body.mobile
   white-space: nowrap;
   margin: 2px;
 }
+
+#btn-instru{
+  font-size: 16px;
+  font-weight: bold;
+  position: fixed;
+  bottom: 16px;
+  left:  calc(32px);
+  border-radius: 8px;
+  background-color: rgb(84, 168, 194);
+  animation: pulse2 2s infinite ease-in-out;
+  animation-delay: 1s;
+  color: #fff;
+  text-transform: uppercase;  
+  font-family: sans-serif;
+  padding: 6px;  
+  border: 3px solid white;
+}
