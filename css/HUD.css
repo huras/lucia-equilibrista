@@ -837,7 +837,8 @@ body.mobile
   bottom: 16px;
   left:  calc(32px);
   border-radius: 8px;
-  background-color: rgb(84, 168, 194);
+  
+  background-color: rgb(45, 128, 153);
   animation: pulse2 2s infinite ease-in-out;
   animation-delay: 1s;
   color: #fff;
@@ -845,4 +846,13 @@ body.mobile
   font-family: sans-serif;
   padding: 6px;  
   border: 3px solid white;
+  cursor: pointer;
 }
+#btn-instru:hover{
+  background-color: rgb(84, 168, 194);
+  transition: 0.2s ease-in background-color;
+}
+
+  #nextPage{
+    cursor: pointer;
+  }
