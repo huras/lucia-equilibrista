@@ -611,6 +611,15 @@ class GameEngine {
 
       document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
       setTimeout(() => {
+
+        this.perguntaAtual++;
+        if (this.distSteper.curentStep + 1 > this.distSteper.steps) {
+          document.querySelector('.result-screen').style.display = 'flex';
+          this.onWinGame();
+        } else {
+          this.onLoadPergunta();
+          document.querySelector('.local-resp').innerHTML = '';
+        }
         document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
       }, 2500);
 
@@ -623,17 +632,9 @@ class GameEngine {
         sounds.sfx.rightAnswer.muted = false;
       }
 
-      this.perguntaAtual++;
+
       this.distSteper.nextStep();
-      if (this.distSteper.curentStep + 1 > this.distSteper.steps) {
-        document.querySelector('.result-screen').style.display = 'flex';
-        this.onWinGame();
-      } else {
-        this.onLoadPergunta();
-        setTimeout(() => {
-          document.querySelector('.local-resp').innerHTML = '';
-        }, 2500)
-      }
+
 
     }
     this.onErrarQuestao = (answerGiven, rightAnswer, questionString, removeLife = true) => {
