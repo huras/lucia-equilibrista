@@ -72,8 +72,9 @@ function loadPreviousStageData(dados) {
         engine.repescagens = loadedData.repescagens + 1;
       }
 
-      document.getElementById('vezes-r').innerHTML = (3 - engine.repescagens);
-      if (engine.repescagens >= 3) {
+      var maxJogadas = 2
+      document.getElementById('vezes-r').innerHTML = (maxJogadas - engine.repescagens);
+      if (engine.repescagens >= maxJogadas) {
         document.getElementById('btn-repescar').style.display = 'none';
       }
 
