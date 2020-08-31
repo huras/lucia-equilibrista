@@ -35,7 +35,7 @@ function dragexit(ev) {
   if (lala != undefined) {
     //console.log(data)
     if (!engine.contaHUD.checaConta(parseInt(data))) {
-      engine.onErrarQuestao(-1, engine.contaHUD.conta.r, engine.contaHUD.conta.q, false)
+      engine.onVacilarResposta()
     }
   }
   lala = undefined;
@@ -582,6 +582,24 @@ class GameEngine {
         bandeja.appendChild(opt)
       })
 
+
+
+    }
+
+    this.onVacilarResposta = () => {
+      if (sounds.sfx.wrongAnswer) { // Dá play num som
+        sounds.sfx.wrongAnswer.currentTime = 0;
+        sounds.sfx.wrongAnswer.play();
+        sounds.sfx.wrongAnswer.muted = false;
+      }
+
+      document.querySelector('.certo-ou-errado .errado').classList.remove('escondido')
+      setTimeout(() => {
+        this.equilibristaCaindo = false;
+        this.equilibristaY = 0;
+        document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
+      }, 2500)
+      document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
 
     }
     this.onAcertarQuestao = (answerGiven, rightAnswer, questionString) => {
