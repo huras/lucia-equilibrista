@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title> Animation Player </title>
 
+  <link rel="stylesheet" href="../../css/canvasDefault.css">
+  <link rel="stylesheet" href="../../css/HUD.css">
+
   <style>
     body {
       height: 100vh;
@@ -98,6 +101,55 @@
 </head>
 
 <body>
+  <script src="../../src/babel/bundle.js"></script>
+  <div class='interactableHUD'>
+
+    <div class='instruction-page1-screen instruction-screen' style='display: none;'>
+      <img src="../../img/instructions/pag1-B.png" style='max-width: 95%;'>
+
+      <div class='dflex flex-column' style='position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);'>
+        <div class='dflex'>
+          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(0)">
+            <img src="../../img/ui/hand-point-right-solid.svg"
+              style='transform: scaleX(-1); height: 25px; margin-right: 8px'>
+            <span> MENU </span>
+          </button>
+
+          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(2)">
+            <img src="../../img/ui/hand-point-right-solid.svg" style='height: 25px; margin-right: 8px;'>
+            <span> PRÓXIMO </span>
+          </button>
+        </div>
+      </div>
+      <img onclick="instrucoes(0); engine.onUnpauseGame();" src="../../img/ui/times-circle-solid.svg"
+        style='height: 35px; position: fixed; right: 8px; top: 8px; animation: scaleBlinkUp2 2.15s infinite ease-out;'>
+      <div style='position: fixed; right: 46%; top: 8px; transform: translateX(-50%);'> 1/2 </div>
+    </div>
+
+    <div class='instruction-page2-screen instruction-screen' style='display: none;'>
+      <img src="../../img/instructions/pag2-A.png" style='max-width: 95%;'>
+
+      <div class='dflex flex-column' style='position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);'>
+        <div class='dflex'>
+          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(1)">
+            <img src="../../img/ui/hand-point-right-solid.svg"
+              style='transform: scaleX(-1); height: 25px; margin-right: 8px'>
+            <span> VOLTAR </span>
+          </button>
+
+          <button class='retornar-btn btn-laranjado dflex' onclick="instrucoes(0)">
+            <img src="../../img/ui/hand-point-right-solid.svg" style='height: 25px; margin-right: 8px;'>
+            <span> MENU </span>
+          </button>
+        </div>
+      </div>
+      <img onclick="instrucoes(0); engine.onUnpauseGame();" src="../../img/ui/times-circle-solid.svg"
+        style='height: 35px; position: fixed; right: 8px; top: 8px; animation: scaleBlinkUp2 2.15s infinite ease-out;'>
+      <div style='position: fixed; right: 46%; top: 8px; transform: translateX(-50%);'> 2/2 </div>
+    </div>
+
+  </div>
+
   <div class='play'>
     <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="play" class="svg-inline--fa fa-play fa-w-14"
       role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -110,6 +162,12 @@
 
   <div id='nextPage' onclick="loadNewScene('./Cenas/Stage1/index.html', 'landscape-primary')">
     <img src="./img/nav-button.png">
+  </div>
+
+  <div id="btn-instru" onclick="instrucoes(1)">
+    <span class="noInteraction">
+      instruções
+    </span>
   </div>
 
   <canvas id='canvas'> </canvas>
