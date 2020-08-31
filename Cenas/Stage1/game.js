@@ -35,7 +35,7 @@ function dragexit(ev) {
   if (lala != undefined) {
     //console.log(data)
     if (!engine.contaHUD.checaConta(parseInt(data))) {
-      engine.onErrarQuestao(-1, engine.contaHUD.conta.r, engine.contaHUD.conta.q, false)
+      engine.onVacilarResposta()
     }
   }
   lala = undefined;
@@ -554,6 +554,24 @@ class GameEngine {
       })
 
 
+
+    }
+
+    this.onVacilarResposta = () => {
+      if (sounds.sfx.wrongAnswer) { // Dá play num som
+        sounds.sfx.wrongAnswer.currentTime = 0;
+        sounds.sfx.wrongAnswer.play();
+        sounds.sfx.wrongAnswer.muted = false;
+      }
+
+      document.querySelector('.certo-ou-errado .errado').classList.remove('escondido')
+      setTimeout(() => {
+        this.equilibristaCaindo = false;
+        this.equilibristaY = 0;
+        document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
+      }, 2500)
+      document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
+
     }
     this.onAcertarQuestao = (answerGiven, rightAnswer, questionString) => {
       this.frag.incluirAcerto({
@@ -564,6 +582,15 @@ class GameEngine {
 
       document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
       setTimeout(() => {
+
+        this.perguntaAtual++;
+        if (this.distSteper.curentStep + 1 > this.distSteper.steps) {
+          document.querySelector('.result-screen').style.display = 'flex';
+          this.onWinGame();
+        } else {
+          this.onLoadPergunta();
+          document.querySelector('.local-resp').innerHTML = '';
+        }
         document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
       }, 2500);
 
@@ -576,17 +603,9 @@ class GameEngine {
         sounds.sfx.rightAnswer.muted = false;
       }
 
-      this.perguntaAtual++;
+
       this.distSteper.nextStep();
-      if (this.distSteper.curentStep + 1 > this.distSteper.steps) {
-        document.querySelector('.result-screen').style.display = 'flex';
-        this.onWinGame();
-      } else {
-        this.onLoadPergunta();
-        setTimeout(() => {
-          document.querySelector('.local-resp').innerHTML = '';
-        }, 2500)
-      }
+
 
     }
     this.onErrarQuestao = (answerGiven, rightAnswer, questionString, removeLife = true) => {
