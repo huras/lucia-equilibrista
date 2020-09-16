@@ -1,6 +1,5 @@
 // =================================================== External Funcitons
 
-
 function loadNewScene() {
   alert("loadNewScene está vazio");
 }
@@ -23,7 +22,8 @@ function allowDrop(ev) {
 }
 
 function somEnunciado() {
-  if (sounds.sfx.ingameEnunciado) { // Dá play num som
+  if (sounds.sfx.ingameEnunciado) {
+    // Dá play num som
     sounds.sfx.ingameEnunciado.currentTime = 0;
     sounds.sfx.ingameEnunciado.play();
     sounds.sfx.ingameEnunciado.muted = false;
@@ -35,7 +35,7 @@ function dragexit(ev) {
   if (lala != undefined) {
     //console.log(data)
     if (!engine.contaHUD.checaConta(parseInt(data))) {
-      engine.onVacilarResposta()
+      engine.onVacilarResposta();
     }
   }
   lala = undefined;
@@ -46,7 +46,7 @@ var lala = undefined;
 function drag(ev) {
   //console.log('drag')
   lala = ev.target.innerHTML;
-  ev.dataTransfer.setData("text", ev.target.getAttribute('valor'));
+  ev.dataTransfer.setData("text", ev.target.getAttribute("valor"));
   ev.dataTransfer.setData("color", ev.target.classList);
 }
 
@@ -56,14 +56,13 @@ function drop(ev) {
   if (engine.onDarResposta(parseInt(data))) {
     ev.target.innerHTML = data;
     ev.target.classList = ev.dataTransfer.getData("color");
-    ev.target.classList.add('local-resp')
+    ev.target.classList.add("local-resp");
   }
   lala = undefined;
 }
 
 var loadedData = undefined;
 function loadPreviousStageData(dados) {
-
   if (engine) {
     if (loadedData != undefined) {
       if (loadedData.repescagens == undefined) {
@@ -72,10 +71,11 @@ function loadPreviousStageData(dados) {
         engine.repescagens = loadedData.repescagens + 1;
       }
 
-      var maxJogadas = 2
-      document.getElementById('vezes-r').innerHTML = (maxJogadas - engine.repescagens);
+      var maxJogadas = 2;
+      document.getElementById("vezes-r").innerHTML =
+        maxJogadas - engine.repescagens;
       if (engine.repescagens >= maxJogadas) {
-        document.getElementById('btn-repescar').style.display = 'none';
+        document.getElementById("btn-repescar").style.display = "none";
       }
 
       console.log(engine.repescagens);
@@ -93,8 +93,8 @@ var engineLife = 0;
 const canvas = document.getElementById("canvas");
 const canvasInt = new CanvasInterface({
   canvas: canvas,
-  pixelBeauty: false
-})
+  pixelBeauty: false,
+});
 
 const engineStates = {
   StagePlaying: 0,
@@ -169,14 +169,11 @@ class GameEngine {
   }
 
   start() {
-    if (debugEngine)
-      console.log('Engine iniciada!');
+    if (debugEngine) console.log("Engine iniciada!");
 
     this.changeState(engineStates.StagePlaying);
     this.gameLoop();
     somEnunciado();
-
-
   }
 
   gameLoop() {
@@ -208,8 +205,6 @@ class GameEngine {
     //   // });
     // }, 1000 / 30);
 
-
-
     // this.evolveState(deltaTime / (1 / 30));
     this.evolveState(1);
 
@@ -223,34 +218,35 @@ class GameEngine {
 
   evolveState(deltaTime = 1) {
     switch (this.engineState) {
-      case engineStates.StagePlaying: {
-
-      } break;
-      case engineStates.LOADING: {
-
-      } break;
-      case engineStates.WAITING_NEW_SCENE: {
-
-      } break;
+      case engineStates.StagePlaying:
+        {
+        }
+        break;
+      case engineStates.LOADING:
+        {
+        }
+        break;
+      case engineStates.WAITING_NEW_SCENE:
+        {
+        }
+        break;
     }
 
     this.update(deltaTime);
   }
 
   touchOrClickCanvas(event, clickValue = true) {
-
     // Get X and Y dop mouse / toque
     var x = 0;
     if (event.touches) {
-      if (event.touches.length > 0)
-        x = event.touches[0].pageX
-      else
-        x = event.pageX;
-    }
-    else
-      x = event.pageX;
+      if (event.touches.length > 0) x = event.touches[0].pageX;
+      else x = event.pageX;
+    } else x = event.pageX;
 
-    var y = event.touches ? event.touches.length > 0 ? event.touches[0].pageY : event.pageY
+    var y = event.touches
+      ? event.touches.length > 0
+        ? event.touches[0].pageY
+        : event.pageY
       : event.pageY;
 
     x -= canvas.offsetLeft;
@@ -271,21 +267,19 @@ class GameEngine {
 
     // Processa clique / desclique
     if (clickValue == true) {
-
     } else {
-
     }
   }
 
-  // =========================== renderizar  
+  // =========================== renderizar
 
   onLoadStage(stage = 1) {
     this.engineLife = engineLife;
     this.currentStage = stage;
-    this.currentScene = 'fase' + stage;
+    this.currentScene = "fase" + stage;
     this.firstFrame(stage);
     this.changeState(engineStates.StagePlaying);
-    document.querySelector('.gameover-screen').style.display = 'none'; //Esconde tela de gameover
+    document.querySelector(".gameover-screen").style.display = "none"; //Esconde tela de gameover
     // document.querySelector('.menu-screen').style.display = 'none'; //Esconde tela de menu
   }
 
@@ -311,30 +305,35 @@ class GameEngine {
     // });
 
     // === Set Layout
-    this.ceu = new BGGradiente([
-      {
-        firstFrame: true,
-        keyframe: 0,
-        points: [
-          { id: 0, color: { r: 132, g: 214, b: 255 }, position: 0 },
-          { id: 1, color: { r: 129, g: 213, b: 225 }, position: 0.16 },
-          { id: 2, color: { r: 115, g: 206, b: 255 }, position: 0.35 },
-          { id: 3, color: { r: 107, g: 198, b: 247 }, position: 0.58 },
-          { id: 4, color: { r: 97, g: 192, b: 247 }, position: 0.75 },
-          { id: 5, color: { r: 82, g: 181, b: 239 }, position: 1 },
-        ]
-      },
-      {
-        keyframe: 3500,
-        points: [
-          { id: 0, color: { r: 68, g: 174, b: 239 }, position: 0 },
-          { id: 1, color: { r: 57, g: 165, b: 222 }, position: 0.06 },
-          { id: 2, color: { r: 54, g: 163, b: 222 }, position: 0.15 },
-          { id: 3, color: { r: 41, g: 156, b: 222 }, position: 0.48 },
-          { id: 4, color: { r: 33, g: 148, b: 214 }, position: 0.6 },
-          { id: 5, color: { r: 8, g: 132, b: 206 }, position: 1 },
-        ]
-      }], this.canvas, this.ctx);
+    this.ceu = new BGGradiente(
+      [
+        {
+          firstFrame: true,
+          keyframe: 0,
+          points: [
+            { id: 0, color: { r: 132, g: 214, b: 255 }, position: 0 },
+            { id: 1, color: { r: 129, g: 213, b: 225 }, position: 0.16 },
+            { id: 2, color: { r: 115, g: 206, b: 255 }, position: 0.35 },
+            { id: 3, color: { r: 107, g: 198, b: 247 }, position: 0.58 },
+            { id: 4, color: { r: 97, g: 192, b: 247 }, position: 0.75 },
+            { id: 5, color: { r: 82, g: 181, b: 239 }, position: 1 },
+          ],
+        },
+        {
+          keyframe: 3500,
+          points: [
+            { id: 0, color: { r: 68, g: 174, b: 239 }, position: 0 },
+            { id: 1, color: { r: 57, g: 165, b: 222 }, position: 0.06 },
+            { id: 2, color: { r: 54, g: 163, b: 222 }, position: 0.15 },
+            { id: 3, color: { r: 41, g: 156, b: 222 }, position: 0.48 },
+            { id: 4, color: { r: 33, g: 148, b: 214 }, position: 0.6 },
+            { id: 5, color: { r: 8, g: 132, b: 206 }, position: 1 },
+          ],
+        },
+      ],
+      this.canvas,
+      this.ctx
+    );
 
     this.layeredBackground = new MultilayerBackground({
       canvas: this.canvas,
@@ -353,72 +352,102 @@ class GameEngine {
           depth: 40,
           image: bg,
           sizes: {
-            x: (layer) => { return this.canvas.width + 250 },
-            y: (layer) => { return Math.min(layer.image.height, this.canvas.height * 0.7) }
+            x: (layer) => {
+              return this.canvas.width + 250;
+            },
+            y: (layer) => {
+              return Math.min(layer.image.height, this.canvas.height * 0.7);
+            },
           },
-          offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
-          screenPivot: { x: 0.5, y: 1 }, scale: 0.5
+          offset: { x: 0, y: 0 },
+          pivot: { x: 0.5, y: 1 },
+          screenPivot: { x: 0.5, y: 1 },
+          scale: 0.5,
         },
         {
           depth: 39,
           image: circus,
           sizes: {
-            x: (layer) => { return layer.image.width * layer.scale },
-            y: (layer) => { return layer.image.height * layer.scale }
+            x: (layer) => {
+              return layer.image.width * layer.scale;
+            },
+            y: (layer) => {
+              return layer.image.height * layer.scale;
+            },
           },
           responsive: (w, h) => {
-            if (this.layout == 'mobile') {
+            if (this.layout == "mobile") {
               return 0.35;
             }
 
             return 1;
           },
-          offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
-          screenPivot: { x: 0.55, y: 0.75 }, scale: 0.5
+          offset: { x: 0, y: 0 },
+          pivot: { x: 0.5, y: 1 },
+          screenPivot: { x: 0.55, y: 0.75 },
+          scale: 0.5,
         },
         {
           depth: 38,
           image: rodaGig,
           sizes: {
-            x: (layer) => { return layer.image.width * layer.scale },
-            y: (layer) => { return layer.image.height * layer.scale }
+            x: (layer) => {
+              return layer.image.width * layer.scale;
+            },
+            y: (layer) => {
+              return layer.image.height * layer.scale;
+            },
           },
           responsive: (w, h) => {
-            if (this.layout == 'mobile') {
+            if (this.layout == "mobile") {
               return 0.5;
             }
 
             return 2;
           },
-          offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
-          screenPivot: { x: 0.05, y: 0.70 }, scale: 0.6
+          offset: { x: 0, y: 0 },
+          pivot: { x: 0.5, y: 1 },
+          screenPivot: { x: 0.05, y: 0.7 },
+          scale: 0.6,
         },
         {
           depth: 37,
           image: carrosel,
           sizes: {
-            x: (layer) => { return layer.image.width * layer.scale },
-            y: (layer) => { return layer.image.height * layer.scale }
+            x: (layer) => {
+              return layer.image.width * layer.scale;
+            },
+            y: (layer) => {
+              return layer.image.height * layer.scale;
+            },
           },
           responsive: (w, h) => {
-            if (this.layout == 'mobile') {
+            if (this.layout == "mobile") {
               return 0.75;
             }
 
             return 2;
           },
-          offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
-          screenPivot: { x: 0.75, y: 0.8 }, scale: 0.3
+          offset: { x: 0, y: 0 },
+          pivot: { x: 0.5, y: 1 },
+          screenPivot: { x: 0.75, y: 0.8 },
+          scale: 0.3,
         },
         {
           depth: 34,
           image: corda_bamba,
           sizes: {
-            x: (layer) => { return this.canvas.width * 0.85 },
-            y: (layer) => { return this.canvas.height * 0.7 }
+            x: (layer) => {
+              return this.canvas.width * 0.85;
+            },
+            y: (layer) => {
+              return this.canvas.height * 0.7;
+            },
           },
-          offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 },
-          screenPivot: { x: 0.5, y: 1 }, scale: 0.5
+          offset: { x: 0, y: 0 },
+          pivot: { x: 0.5, y: 1 },
+          screenPivot: { x: 0.5, y: 1 },
+          scale: 0.5,
         },
         // { depth: 30, image: plataforma, sizes: { x: (layer) => { return this.canvas.width }, y: (layer) => { return layer.image.height * layer.scale } }, offset: { x: 0, y: 0 }, pivot: { x: 0.5, y: 1 }, screenPivot: { x: 0.5, y: 1 }, scale: 0.5 },
       ],
@@ -429,94 +458,74 @@ class GameEngine {
       frontSpeed: 6,
     });
 
-    this.equilibrista = new ArcadePhysicsObject(
-      {
-        canvas: this.canvas,
-        ctx: this.ctx,
-        image: equilibrista,
-        position: { x: this.canvas.width * 0.5, y: this.canvas.height * 0.5 },
-        responsive: (obj) => {
-          obj.position.x = (this.distSteper.currentPosition *
-            (((this.distSteper.endPoint - this.distSteper.startPoint) + this.distSteper.startPoint) / this.distSteper.steps))
-            + this.canvas.width * 0.21;
+    this.equilibrista = new ArcadePhysicsObject({
+      canvas: this.canvas,
+      ctx: this.ctx,
+      image: equilibrista,
+      position: { x: this.canvas.width * 0.5, y: this.canvas.height * 0.5 },
+      responsive: (obj) => {
+        obj.position.x =
+          this.distSteper.currentPosition *
+            ((this.distSteper.endPoint -
+              this.distSteper.startPoint +
+              this.distSteper.startPoint) /
+              this.distSteper.steps) +
+          this.canvas.width * 0.21;
 
-          obj.position.y = this.canvas.height * 0.7 - 138 * obj.scaler + (this.equilibristaY || 0);
-        },
-        responsiveScaling: (fW, fH) => {
-          if (this.layout2 == 'm') {
-            return (this.canvas.height / 414) * 0.7;
-          }
+        obj.position.y =
+          this.canvas.height * 0.7 -
+          138 * obj.scaler +
+          (this.equilibristaY || 0);
+      },
+      responsiveScaling: (fW, fH) => {
+        if (this.layout2 == "m") {
+          return (this.canvas.height / 414) * 0.7;
         }
-      }
-    );
+      },
+    });
 
     this.arcadeObjs = [];
     this.arcadeObjs.push(this.equilibrista);
 
-    this.distSteper = new DistanceSteper(this.canvas.width * 0.3, this.canvas.width * 0.65, 6, 0);
+    this.distSteper = new DistanceSteper(
+      this.canvas.width * 0.3,
+      this.canvas.width * 0.65,
+      6,
+      0
+    );
 
     // this.distSteper.goToStep(2);
 
     this.perguntas = [
       {
-        q: '38 - 33 =', //questão
-        r: 5,         //resposta
-        o: [3, 4, 6, 7]
+        q: "5 + 7 =", //questão
+        r: 12, //resposta
+        o: [11, 8, 15, 9],
       },
       {
-        q: '34 - 7 =',
-        r: 27,
-        o: [25, 26, 24, 20]
-      },
-      {
-        q: '32 - 21 =',
-        r: 11,
-        o: [12, 13, 14, 10]
-      },
-      {
-        q: '38 - 11 =',
-        r: 27,
-        o: [28, 25, 29, 30]
-      },
-      {
-        q: '32 - 20 =',
-        r: 12,
-        o: [7, 10, 8, 11]
-      },
-      {
-        q: '31 - 17 =',
+        q: "8 + 6 =",
         r: 14,
-        o: [11, 13, 12, 10]
+        o: [12, 11, 15, 10],
       },
       {
-        q: '40 - 34 =',
-        r: 6,
-        o: [7, 10, 9, 8]
+        q: "1 + 18 =",
+        r: 19,
+        o: [18, 20, 21, 24],
       },
       {
-        q: '36 - 8 =',
-        r: 28,
-        o: [30, 26, 27, 31]
+        q: "4 + 20 =",
+        r: 24,
+        o: [23, 22, 20, 19],
       },
       {
-        q: '34 - 12 =',
-        r: 22,
-        o: [21, 20, 25, 24]
-      },
-      {
-        q: '41 - 29 =',
-        r: 12,
-        o: [11, 14, 15, 10]
-      },
-      {
-        q: '34 - 14 =',
+        q: "16 + 4 =",
         r: 20,
-        o: [18, 21, 22, 19]
+        o: [18, 22, 24, 23],
       },
       {
-        q: '33 - 18 =',
-        r: 15,
-        o: [14, 16, 10, 11]
+        q: "12 + 12 =",
+        r: 24,
+        o: [23, 25, 27, 22],
       },
     ];
 
@@ -525,150 +534,185 @@ class GameEngine {
     this.perguntaAtual = 0;
 
     // === Set HUD
-    this.crystalCounter = new HUDCounter(60, 'txt_qtd-moedas');
+    this.crystalCounter = new HUDCounter(60, "txt_qtd-moedas");
     this.frag = new FragManager();
-    this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3'], args => { onGameOver() }, 3); // this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3']);
-    this.contaHUD = new ContaHUD({ selector: '#continha' });
+    this.heartHUD = new HeartHUD(
+      3,
+      ["#vida1", "#vida2", "#vida3"],
+      (args) => {
+        onGameOver();
+      },
+      3
+    ); // this.heartHUD = new HeartHUD(3, ['#vida1', '#vida2', '#vida3']);
+    this.contaHUD = new ContaHUD({ selector: "#continha" });
 
-    document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
-    document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
+    document
+      .querySelector(".certo-ou-errado .certo")
+      .classList.add("escondido");
+    document
+      .querySelector(".certo-ou-errado .errado")
+      .classList.add("escondido");
 
     // === Eventos importantes no jogo
     this.onDarResposta = (resposta) => {
-
-      var ret = engine.contaHUD.checaConta(resposta)
+      var ret = engine.contaHUD.checaConta(resposta);
       if (ret) {
-        this.onAcertarQuestao(resposta, this.contaHUD.conta.r, this.contaHUD.conta.q)
+        this.onAcertarQuestao(
+          resposta,
+          this.contaHUD.conta.r,
+          this.contaHUD.conta.q
+        );
       } else {
-        this.onErrarQuestao(resposta, this.contaHUD.conta.r, this.contaHUD.conta.q)
+        this.onErrarQuestao(
+          resposta,
+          this.contaHUD.conta.r,
+          this.contaHUD.conta.q
+        );
       }
 
-      return ret
-    }
+      return ret;
+    };
     this.onLoadPergunta = () => {
-      this.contaHUD.setOp(this.perguntas[this.perguntaAtual])
+      this.contaHUD.setOp(this.perguntas[this.perguntaAtual]);
 
-      var bandeja = document.querySelector('.bandeja-num');
-      bandeja.innerHTML = '';
-      var pergunta = JSON.parse(JSON.stringify(this.perguntas[this.perguntaAtual]));
+      var bandeja = document.querySelector(".bandeja-num");
+      bandeja.innerHTML = "";
+      var pergunta = JSON.parse(
+        JSON.stringify(this.perguntas[this.perguntaAtual])
+      );
       var cor = 1;
 
-      pergunta.o.push(pergunta.r)
-      pergunta.o = shuffle(pergunta.o)
+      pergunta.o.push(pergunta.r);
+      pergunta.o = shuffle(pergunta.o);
       pergunta.o.map((item) => {
-        const opt = document.createElement('div')
-        opt.classList.add('opicao');
+        const opt = document.createElement("div");
+        opt.classList.add("opicao");
 
-        const num = document.createElement('div')
-        num.innerHTML = item + '';
-        num.classList.add('num');
+        const num = document.createElement("div");
+        num.innerHTML = item + "";
+        num.classList.add("num");
 
-        const val = document.createElement('div')
+        const val = document.createElement("div");
 
-        val.classList.add('cor' + cor);
-        cor++
-        val.setAttribute('draggable', 'true')
-        val.setAttribute('valor', item)
+        val.classList.add("cor" + cor);
+        cor++;
+        val.setAttribute("draggable", "true");
+        val.setAttribute("valor", item);
         val.ondragstart = (event) => {
-          drag(event)
-        }
+          drag(event);
+        };
         //
         val.ondragend = (event) => {
-          dragexit(event)
-        }
+          dragexit(event);
+        };
 
-        val.appendChild(num)
-        opt.appendChild(val)
-        bandeja.appendChild(opt)
-      })
-
-
-
-    }
+        val.appendChild(num);
+        opt.appendChild(val);
+        bandeja.appendChild(opt);
+      });
+    };
 
     this.onVacilarResposta = () => {
-      if (sounds.sfx.wrongAnswer) { // Dá play num som
+      if (sounds.sfx.wrongAnswer) {
+        // Dá play num som
         sounds.sfx.wrongAnswer.currentTime = 0;
         sounds.sfx.wrongAnswer.play();
         sounds.sfx.wrongAnswer.muted = false;
       }
 
-      document.querySelector('.certo-ou-errado .errado').classList.remove('escondido')
+      document
+        .querySelector(".certo-ou-errado .errado")
+        .classList.remove("escondido");
       setTimeout(() => {
         this.equilibristaCaindo = false;
         this.equilibristaY = 0;
-        document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
-      }, 2500)
-      document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
-
-    }
+        document
+          .querySelector(".certo-ou-errado .errado")
+          .classList.add("escondido");
+      }, 2500);
+      document
+        .querySelector(".certo-ou-errado .certo")
+        .classList.add("escondido");
+    };
     this.onAcertarQuestao = (answerGiven, rightAnswer, questionString) => {
       this.frag.incluirAcerto({
         questionString: questionString,
         rightAnswer: rightAnswer,
-        answerGiven: answerGiven
+        answerGiven: answerGiven,
       });
 
-      document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
+      document
+        .querySelector(".certo-ou-errado .errado")
+        .classList.add("escondido");
       setTimeout(() => {
-
         this.perguntaAtual++;
         if (this.distSteper.curentStep + 1 > this.distSteper.steps) {
-          document.querySelector('.result-screen').style.display = 'flex';
+          document.querySelector(".result-screen").style.display = "flex";
           this.onWinGame();
         } else {
           this.onLoadPergunta();
-          document.querySelector('.local-resp').innerHTML = '';
+          document.querySelector(".local-resp").innerHTML = "";
         }
-        document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
+        document
+          .querySelector(".certo-ou-errado .certo")
+          .classList.add("escondido");
       }, 2500);
 
-      var certo = document.querySelector('.certo-ou-errado .certo')
-      certo.classList.remove('escondido')
+      var certo = document.querySelector(".certo-ou-errado .certo");
+      certo.classList.remove("escondido");
 
-      if (sounds.sfx.rightAnswer) { // Dá play num som
+      if (sounds.sfx.rightAnswer) {
+        // Dá play num som
         sounds.sfx.rightAnswer.currentTime = 0;
         sounds.sfx.rightAnswer.play();
         sounds.sfx.rightAnswer.muted = false;
       }
 
-
       this.distSteper.nextStep();
-
-
-    }
-    this.onErrarQuestao = (answerGiven, rightAnswer, questionString, removeLife = true) => {
+    };
+    this.onErrarQuestao = (
+      answerGiven,
+      rightAnswer,
+      questionString,
+      removeLife = true
+    ) => {
       this.frag.incluirErro({
         questionString: questionString,
         rightAnswer: rightAnswer,
-        answerGiven: answerGiven
+        answerGiven: answerGiven,
       });
 
       this.equilibristaCaindo = true;
       this.equilibristaY = 0;
 
-      document.querySelector('.certo-ou-errado .errado').classList.remove('escondido')
+      document
+        .querySelector(".certo-ou-errado .errado")
+        .classList.remove("escondido");
       setTimeout(() => {
         this.equilibristaCaindo = false;
         this.equilibristaY = 0;
-        document.querySelector('.certo-ou-errado .errado').classList.add('escondido')
-      }, 2500)
-      document.querySelector('.certo-ou-errado .certo').classList.add('escondido')
+        document
+          .querySelector(".certo-ou-errado .errado")
+          .classList.add("escondido");
+      }, 2500);
+      document
+        .querySelector(".certo-ou-errado .certo")
+        .classList.add("escondido");
 
-      if (removeLife)
-        this.heartHUD.applyDamage(1);
+      if (removeLife) this.heartHUD.applyDamage(1);
       this.heartHUD.updateHUD();
 
-      if (sounds.sfx.wrongAnswer) { // Dá play num som
+      if (sounds.sfx.wrongAnswer) {
+        // Dá play num som
         sounds.sfx.wrongAnswer.currentTime = 0;
         sounds.sfx.wrongAnswer.play();
         sounds.sfx.wrongAnswer.muted = false;
       }
-    }
+    };
     const onColetarCrystal = (crystalValue, col) => {
       col.mustRender = true;
       col.activeCollider = false;
-      const icon = document.querySelector('#crystal-icon');
+      const icon = document.querySelector("#crystal-icon");
       var clientRectangle = icon.getBoundingClientRect();
       col.animateToCounter = {
         rect: clientRectangle,
@@ -704,121 +748,118 @@ class GameEngine {
         default:
           break;
       }
-
-
-    }
-    const onColetarCheckpoint = (checkpointValue, col) => {
-
-    }
+    };
+    const onColetarCheckpoint = (checkpointValue, col) => {};
     const onGameOver = () => {
-      console.log('guemeouver')
+      console.log("guemeouver");
       engineLife++;
 
-      document.querySelector('.gameover-screen').style.display = 'flex'; //Exibe tela de gameover
+      document.querySelector(".gameover-screen").style.display = "flex"; //Exibe tela de gameover
 
       // Checa se jogador tem dinheiro o suficiente para reviver
 
       if (this.crystalCounter.counter < revivePrice) {
-        document.querySelector(".continuar-button").style.display = 'none'
+        document.querySelector(".continuar-button").style.display = "none";
       } else {
-        document.querySelector(".continuar-button").style.display = 'flex'
+        document.querySelector(".continuar-button").style.display = "flex";
       }
 
       // sounds.sfx.nakaOST.play();
       // this.engineSoundOn = false;
-    }
+    };
     this.onPauseGame = () => {
       this.gamepaused = true;
       // console.log('pause')
-      document.querySelector('.pause-btn').style.display = 'none'; //Bloqueia botão de pausa
-      document.querySelector('.pause-screen').style.display = 'flex'; //Exibe tela de pausa
+      document.querySelector(".pause-btn").style.display = "none"; //Bloqueia botão de pausa
+      document.querySelector(".pause-screen").style.display = "flex"; //Exibe tela de pausa
 
-      setRising(false)
-    }
+      setRising(false);
+    };
     this.onUnpauseGame = () => {
       this.gamepaused = false;
       // console.log('unpause')
-      document.querySelector('.pause-btn').style.display = 'flex'; //Libera botão de pausa
-      document.querySelector('.pause-screen').style.display = 'none'; //Esconde tela de pausa
+      document.querySelector(".pause-btn").style.display = "flex"; //Libera botão de pausa
+      document.querySelector(".pause-screen").style.display = "none"; //Esconde tela de pausa
 
-      setRising(true)
-    }
+      setRising(true);
+    };
     this.onWinGame = () => {
-      document.querySelector('.result-screen').style.display = 'flex'; //Exibe a tela de resultado
+      document.querySelector(".result-screen").style.display = "flex"; //Exibe a tela de resultado
 
       // var percentage = (this.acertosHUD.slots.length + this.heartHUD.hearts) / (this.acertosHUD.slots.length + this.heartHUD.maxHearts)
       var percentage = this.frag.getPercentage();
-      document.querySelector('#nota-final').innerHTML = percentage.toFixed(0) + '%';
+      document.querySelector("#nota-final").innerHTML =
+        percentage.toFixed(0) + "%";
 
       console.log("You're a win!");
       setRising(false);
-    }
+    };
     this.tryToBuyRevive = () => {
       if (this.crystalCounter.counter >= revivePrice) {
         this.crystalCounter.decrease(revivePrice);
         this.onRevive();
       }
-    }
+    };
     this.onRevive = () => {
       this.heartHUD.recoverDamage(3);
-      document.querySelector('.gameover-screen').style.display = 'none'; //Exibe tela de gameover
-      setRising(true)
-    }
+      document.querySelector(".gameover-screen").style.display = "none"; //Exibe tela de gameover
+      setRising(true);
+    };
     this.onResetGame = () => {
       // document.querySelector('.result-screen').style.display = 'none'; //Esconde a tela de resultado
       this.closeAllScreens();
       this.firstFrame();
-    }
+    };
     this.closeAllScreens = () => {
-      document.querySelector('.pause-screen').style.display = 'none'; //Esconde tela
-      document.querySelector('.gameover-screen').style.display = 'none';
-      document.querySelector('.result-screen').style.display = 'none';
-      document.querySelector('.menu-screen').style.display = 'none';
-    }
+      document.querySelector(".pause-screen").style.display = "none"; //Esconde tela
+      document.querySelector(".gameover-screen").style.display = "none";
+      document.querySelector(".result-screen").style.display = "none";
+      document.querySelector(".menu-screen").style.display = "none";
+    };
     this.irParaMenuPrincipal = () => {
       this.hasGameloop = false;
       onGameOver();
       this.onPauseGame();
       this.changeState(engineStates.WAITING_NEW_SCENE);
       this.closeAllScreens();
-      document.querySelector('.menu-screen').style.display = 'flex'; //Esconde tela de menu
-    }
+      document.querySelector(".menu-screen").style.display = "flex"; //Esconde tela de menu
+    };
 
     var setRising = (boolean = true) => {
       this.ceu.mayRise = boolean;
-    }
+    };
     this.ceu.mayRise = true;
 
     // =========================== Filminho inicial
     var lancarFoguete = () => {
       setTimeout(() => {
-        document.querySelector('.pause-btn').style.display = 'flex';
-        document.querySelector('.info-btn').style.display = 'flex';
-        setRising(true)
+        document.querySelector(".pause-btn").style.display = "flex";
+        document.querySelector(".info-btn").style.display = "flex";
+        setRising(true);
         this.spaceship.keepPosition = true;
         this.onUnpauseGame();
         // sounds.sfx.nakaOST.play();
         this.engineSoundOn = true;
       }, 100);
-    }
+    };
     var filminhoInicial = () => {
       if (this.layoutManager.hasLoaded) {
-        console.log('filminhoInicial');
+        console.log("filminhoInicial");
         this.rocketCounterHUD.start(() => {
           lancarFoguete();
-        })
+        });
       } else {
         setTimeout(() => {
           filminhoInicial();
         }, 10);
       }
-    }
+    };
     // filminhoInicial();
     this.onLoadPergunta();
   }
 
   update(deltaTime) {
-    if (this.layout2 == 'm') {
+    if (this.layout2 == "m") {
       document.body.classList.add("mobile");
     }
 
@@ -826,21 +867,18 @@ class GameEngine {
     this.generalScale = 1;
     this.layoutIsMobile = window.mobileAndTabletCheck();
 
-    if (this.currentScene == 'fase1') {
+    if (this.currentScene == "fase1") {
       // Define number of Lanes for Layout
       // Advance or Generate Layout
       if (this.gamepaused != true) {
-
         this.distSteper.update();
 
-        if (this.crystalCounter)
-          this.crystalCounter.updateHUD();
+        if (this.crystalCounter) this.crystalCounter.updateHUD();
 
         this.distSteper.startPoint = this.canvas.width * 0.3;
         this.distSteper.endPoint = this.canvas.width * 0.65;
 
-        if (this.equilibristaCaindo)
-          this.equilibristaY += 1.95;
+        if (this.equilibristaCaindo) this.equilibristaY += 1.95;
 
         // if (this.analogic && this.analogic.draging) {
         // this.spaceship.readTouchMovimentation(this.analogic);
@@ -849,10 +887,9 @@ class GameEngine {
         // }
         // this.spaceship.fisica(deltaTime);
 
-
         //Update Colliders
         // if (this.spaceship.rectCollider) {
-        //   var collisions = this.layoutManager.checkcollision(this.spaceship.rectCollider); //Check Ship Collisions with Collectibles and Checkpoints      
+        //   var collisions = this.layoutManager.checkcollision(this.spaceship.rectCollider); //Check Ship Collisions with Collectibles and Checkpoints
         //   collisions.map(col => {
         //     if (!col.oncollect(col)) {
         //       col.mustRender = false;
@@ -860,8 +897,6 @@ class GameEngine {
         //     }
         //   })
         // }
-
-
       }
 
       this.engineAudioLoop(); //Control Ship Sound
@@ -872,17 +907,17 @@ class GameEngine {
 
   tryRenderThings() {
     //Draw Cenario
-    this.ceu.render(); // Sky BG    
+    this.ceu.render(); // Sky BG
     this.layeredBackground.render(); // Layered BG
     if (this.arcadeObjs) {
-      this.arcadeObjs.map(obj => {
+      this.arcadeObjs.map((obj) => {
         obj.render();
-      })
+      });
     }
-    //Draw Enfeites        
+    //Draw Enfeites
 
-    //Obstacles 
-    //Pickups    
+    //Obstacles
+    //Pickups
     //Draw Equation Progress
     //Draw Score
     // this.DesenhaFPS();
@@ -902,10 +937,10 @@ class GameEngine {
     var mediaFPS = 0;
     var mediaDeltaTime = 0;
 
-    this.fpsBuffer.map(amostra => {
+    this.fpsBuffer.map((amostra) => {
       mediaFPS += amostra.fps;
       mediaDeltaTime += amostra.deltaTime;
-    })
+    });
 
     if (this.fpsBuffer.length > 0) {
       mediaFPS = mediaFPS / this.fpsBuffer.length;
@@ -915,8 +950,13 @@ class GameEngine {
     // this.ctx.fillText(mediaFPS.toFixed(0) + ' FPS, ' + (mediaDeltaTime * 1000).toFixed(1) + 'ms, ', 15, 25, this.canvas.width);
     // this.ctx.strokeText(mediaFPS.toFixed(0) + ' FPS, ' + (mediaDeltaTime * 1000).toFixed(1) + 'ms, ', 15, 25, this.canvas.width);
 
-    this.ctx.fillText(this.fps.toFixed(0) + ' FPS', 15, 25, this.canvas.width);
-    this.ctx.strokeText(this.fps.toFixed(0) + ' FPS', 15, 25, this.canvas.width);
+    this.ctx.fillText(this.fps.toFixed(0) + " FPS", 15, 25, this.canvas.width);
+    this.ctx.strokeText(
+      this.fps.toFixed(0) + " FPS",
+      15,
+      25,
+      this.canvas.width
+    );
   }
 
   engineAudioLoop() {
@@ -937,12 +977,14 @@ class GameEngine {
 
     const generalRocketSound = 0.15;
     var isPlaying = function (myaudio) {
-      return myaudio
-        && myaudio.currentTime > 0
-        && !myaudio.paused
-        && !myaudio.ended
-        && myaudio.readyState > 2;
-    }
+      return (
+        myaudio &&
+        myaudio.currentTime > 0 &&
+        !myaudio.paused &&
+        !myaudio.ended &&
+        myaudio.readyState > 2
+      );
+    };
     if (!isPlaying(sounds.sfx.engineloop1)) {
       // console.log('play!', sounds.sfx.engineloop1)
       // if (Math.abs(this.spaceship.speed.x) > 0.5) {
@@ -954,7 +996,10 @@ class GameEngine {
       }
       // }
 
-      if (!sounds.sfx.engineloop2.hasPlayedFirstTime && !sounds.sfx.engineloop2.hasPlayedFirstTimePromisse) {
+      if (
+        !sounds.sfx.engineloop2.hasPlayedFirstTime &&
+        !sounds.sfx.engineloop2.hasPlayedFirstTimePromisse
+      ) {
         sounds.sfx.engineloop2.hasPlayedFirstTimePromisse = true;
         setTimeout(() => {
           sounds.sfx.engineloop2.hasPlayedFirstTime = true;
@@ -962,7 +1007,7 @@ class GameEngine {
           // sounds.sfx.engineloop2.play();
           sounds.sfx.engineloop2.muted = false;
           sounds.sfx.engineloop2.loop = true;
-        }, sounds.sfx.engineloop1 * 0.5 * 1000 * 456789)
+        }, sounds.sfx.engineloop1 * 0.5 * 1000 * 456789);
       }
     }
 
@@ -976,12 +1021,16 @@ class GameEngine {
     }
 
     // sounds.sfx.engineloop2.play();
-    sounds.sfx.engineloop1.volume = Math.abs((Math.cos(degrees_to_radians((this.engineCounter % 360))) + 1)) * 0.15 * generalRocketSound;
+    sounds.sfx.engineloop1.volume =
+      Math.abs(Math.cos(degrees_to_radians(this.engineCounter % 360)) + 1) *
+      0.15 *
+      generalRocketSound;
     // sounds.sfx.engineloop1.volume = 0;
     sounds.sfx.engineloop2.volume = 0.5 * generalRocketSound;
     // sounds.sfx.engineloop2.volume = 0;
 
-    const speedXRate = (Math.abs(this.spaceship.speed.x) / this.spaceship.maxSpeed.x) * 0.6;
+    const speedXRate =
+      (Math.abs(this.spaceship.speed.x) / this.spaceship.maxSpeed.x) * 0.6;
     sounds.sfx.engineloop1.volume += sounds.sfx.engineloop1.volume * speedXRate;
     sounds.sfx.engineloop2.volume += sounds.sfx.engineloop2.volume * speedXRate;
 
@@ -994,34 +1043,49 @@ class GameEngine {
 
 const forceFullscreen = true;
 var forcedOrientation = undefined;
-canvas.addEventListener("click", function () {
-  if (!document.fullscreenElement && forceFullscreen) {
-    openFullscreen(document.querySelector('body'));
-    // return;
-    if (forcedOrientation) {
-      if (screen.orientation.lock) {
-        screen.orientation.lock(forcedOrientation);
-      }
-      else {
-        screen.lockOrientationUniversal = screen.orientation.lock || screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation;
-        screen.lockOrientationUniversal(forcedOrientation)
+canvas.addEventListener(
+  "click",
+  function () {
+    if (!document.fullscreenElement && forceFullscreen) {
+      openFullscreen(document.querySelector("body"));
+      // return;
+      if (forcedOrientation) {
+        if (screen.orientation.lock) {
+          screen.orientation.lock(forcedOrientation);
+        } else {
+          screen.lockOrientationUniversal =
+            screen.orientation.lock ||
+            screen.lockOrientation ||
+            screen.mozLockOrientation ||
+            screen.msLockOrientation;
+          screen.lockOrientationUniversal(forcedOrientation);
+        }
       }
     }
-  }
-}, false);
+  },
+  false
+);
 
 // ========================================= Carrega recursos
 var sheetLoader = new SheetLoader();
 // Scenery
-const bg = sheetLoader.queueSheet('../../img/stage1/campo - Copia.png');
-const corda_bamba = sheetLoader.queueSheet('../../img/stage1/corda-bamba.png');
-const rodaGig = sheetLoader.queueSheet('../../img/stage1/roda-gigante-static.svg');
-const circus = sheetLoader.queueSheet('../../img/stage1/circo.png');
-const carrosel = sheetLoader.queueSheet('../../img/stage1/carrosel.png');
-const equilibrista = sheetLoader.queueSheet('../../img/stage1/equilibrista.png');
+const bg = sheetLoader.queueSheet("../../img/stage1/campo - Copia.png");
+const corda_bamba = sheetLoader.queueSheet("../../img/stage1/corda-bamba.png");
+const rodaGig = sheetLoader.queueSheet(
+  "../../img/stage1/roda-gigante-static.svg"
+);
+const circus = sheetLoader.queueSheet("../../img/stage1/circo.png");
+const carrosel = sheetLoader.queueSheet("../../img/stage1/carrosel.png");
+const equilibrista = sheetLoader.queueSheet(
+  "../../img/stage1/equilibrista.png"
+);
 
-const chevronup = sheetLoader.queueSheet('../../img/stage1/chevron-up-solid.svg');
-const analogicCircle = sheetLoader.queueSheet('../../img/ui/analogicCircle.png');
+const chevronup = sheetLoader.queueSheet(
+  "../../img/stage1/chevron-up-solid.svg"
+);
+const analogicCircle = sheetLoader.queueSheet(
+  "../../img/ui/analogicCircle.png"
+);
 
 // ======================= Audio Loading
 var sounds = {
@@ -1038,10 +1102,8 @@ var sounds = {
     enunciado: document.getElementById("ingame-enunciado"),
     ingameEnunciado: document.getElementById("ingame-enunciado"),
   },
-  ost: {
-
-  }
-}
+  ost: {},
+};
 var ostStarted = false;
 function startOST() {
   if (!ostStarted) {
@@ -1079,7 +1141,7 @@ var ativarSounds = () => {
       }
     }
   }
-}
+};
 
 // window.addEventListener('load', () => {
 //   // window.addEventListener('mousemove', () => {
@@ -1092,10 +1154,9 @@ var ativarSounds = () => {
 //   // })
 // })
 
-let engine = new GameEngine(canvas.getContext('2d'), canvas);
+let engine = new GameEngine(canvas.getContext("2d"), canvas);
 sheetLoader.loadSheetQueue(() => {
-  if (debugEngine)
-    console.log('Imagens carregadas!');
+  if (debugEngine) console.log("Imagens carregadas!");
   engine.start();
-  engine.onLoadStage(1)
+  engine.onLoadStage(1);
 });
