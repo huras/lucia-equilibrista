@@ -54,9 +54,10 @@ function drop(ev) {
   ev.preventDefault();
   var data = ev.dataTransfer.getData("text");
   if (engine.onDarResposta(parseInt(data))) {
-    ev.target.innerHTML = data;
-    ev.target.classList = ev.dataTransfer.getData("color");
-    ev.target.classList.add("local-resp");
+    const target = document.querySelector(".local-resp");
+    target.innerHTML = data;
+    target.classList = ev.dataTransfer.getData("color");
+    target.classList.add("local-resp");
   }
   lala = undefined;
 }
